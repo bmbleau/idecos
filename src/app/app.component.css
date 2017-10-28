@@ -1,0 +1,49 @@
+main {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+}
+
+nav {
+  display: flex;
+  flex: 1;
+  background-color: #ccc;
+  justify-content: center;
+  border-right: 1px solid gray;
+}
+
+nav ul {
+  list-style: none;
+  margin: 5px;
+  margin-bottom: 0px;
+  margin-top: 0px;
+  padding: 0px;
+  overflow-y: auto;
+}
+
+nav ul::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+nav ul li {
+  background-color: #eee;
+  padding: 15px;
+  height: 5vh;
+  width: 5vh;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border-radius: 100px;
+  text-align: center;
+  line-height: 30px;
+  border: 2px solid gray;
+}
+
+nav ul li.active {
+  border-color: red;
+}
+
+section {
+  display: flex;
+  flex: 24;
+}
