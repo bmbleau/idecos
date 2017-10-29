@@ -1,9 +1,14 @@
 <main>
   <nav>
     <ul>
-      <li *ngFor="let plugin of plugins; let i = index;"
-          (click)="selectPlugin(i)"
-          [ngClass]="{'active': plugin.isSelected}">{{ plugin.title }}</li>
+      <li *ngFor="let plugin of pluginService.plugins; let i = index;"
+          (click)="pluginService.selectPlugin(i)"
+          [ngClass]="{'active': plugin.isSelected}">
+        <span *ngIf="plugin.icon"
+              [ngClass]="plugin.icon"
+              class="fa">
+        </span>
+      </li>
     </ul>
   </nav>
   <section>

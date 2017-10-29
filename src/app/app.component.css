@@ -7,9 +7,9 @@ main {
 nav {
   display: flex;
   flex: 1;
-  background-color: #ccc;
+  background-color: #073642;
   justify-content: center;
-  border-right: 1px solid gray;
+  border-right: 1px solid black;
 }
 
 nav ul {
@@ -27,23 +27,28 @@ nav ul::-webkit-scrollbar {
 }
 
 nav ul li {
-  background-color: #eee;
+  background-color: #002B36;
+  color: #268BD2;
   padding: 15px;
-  height: 5vh;
-  width: 5vh;
+  height: 20px;
+  width: 20px;
   margin-top: 5px;
   margin-bottom: 5px;
   border-radius: 100px;
   text-align: center;
-  line-height: 30px;
-  border: 2px solid gray;
+  line-height: 20px;
+  font-size: 22px;
+  border: 2px solid #268BD2;
+  cursor: pointer;
 }
 
 nav ul li.active {
-  border-color: red;
+  border-color: #CB4B16;
+  color: #CB4B16;
 }
 
 section {
   display: flex;
+  flex-direction: column;
   flex: 24;
 }

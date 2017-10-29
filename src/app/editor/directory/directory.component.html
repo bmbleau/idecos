@@ -1,0 +1,17 @@
+<ul class="fa-ul" *ngIf="entry">
+  <li (click)="action()">
+    <i class="fa-li fa"
+       [ngClass]="{
+         'fa-folder-open-o': !hidden && entry.isDirectory,
+         'fa-folder-open': hidden && entry.isDirectory,
+         'fa-file': entry.isFile
+        }">
+    </i>
+    {{ entry.name }}
+  </li>
+  <span *ngIf="!hidden && entry.isDirectory">
+    <directory *ngFor="let child of entry.contents"
+               [entry]="child">
+    </directory>
+  </span>
+</ul>
