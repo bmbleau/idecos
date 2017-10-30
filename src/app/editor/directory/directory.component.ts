@@ -1,5 +1,6 @@
 import { Component, Input, ViewEncapsulation } from '@angular/core';
-// import { Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
+import { EditorState } from '../editor.state';
 
 @Component({
   selector: 'directory',
@@ -12,11 +13,15 @@ export class DirectoryComponent {
   @Input() hidden: boolean = true;
   
   constructor(
+    private store$: Store<EditorState>,
   ) { }
   
   public action() {
-    if (this.entry.isFile && this.entry.action) {
-      this.entry.action.call(this, this.entry);
+    if (this.entry.isFile) {
+      this.store$.dispatch({
+        type: 'editor:tab:add',
+        payload: this.entry,
+      });
     } else {
       this.hidden = !this.hidden;
     }

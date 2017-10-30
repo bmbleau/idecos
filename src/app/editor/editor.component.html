@@ -7,11 +7,12 @@
   <section>
     <nav>
       <ul>
-        <!--<li class="active">Welcome Article</li>-->
-        <!--<li class="">Welcome Article</li>-->
-        <!--<li class="">Welcome Article</li>-->
-        <!--<li class="">Welcome Article</li>-->
-        <!--<li class="">Welcome Article</li>-->
+        <li *ngFor="let tab of (editor$ | async).tabs; let i = index;"
+            [ngClass]="{'active': i === (editor$ | async).selectedTab}"
+            (click)="$event.which == 2 ? removeTab(i) : selectTab(i)"
+            (dblclick)="removeTab(i)">
+          {{ fileName(tab) }}
+        </li>
       </ul>
     </nav>
     <article [monacoEditor]="(editor$ | async).code"

@@ -56,12 +56,13 @@ section nav ul {
 section nav ul li {
   display: inline;
   flex: 1;
-  min-width: 100px;
+  width: 100px;
   line-height: 40px;
   font-weight: bold;
   overflow: hidden;
   color: #FDF6E3;
   background-color: #073642;
+  margin-bottom: -1px;
 }
 
 section nav ul .active {

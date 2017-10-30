@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import { WindowService } from './window.service';
+import * as md5 from 'md5';
 
 @Injectable()
 export class FileService {
@@ -77,6 +78,7 @@ export class FileService {
           .then(this.readFiles)
           .then(file => {
             entry.contents = file;
+            entry.md5 = md5(file);
             return entry;
           });
       }
@@ -104,6 +106,7 @@ export class FileService {
   public saveFile(entry, contents) {
     return this.createWriter(entry)
       .then(writer => {
+        entry.md5 = md5(contents);
         return [writer, contents];
       })
       .then(this.writeFile.bind(this));

@@ -1,3 +1,5 @@
+import { EditorLanguageMap } from './language.map';
+
 export type EditorLanguage = 'markdown';
 export type EditorOptions = {
   lineNumbers: boolean,
@@ -28,8 +30,6 @@ export type EditorTheme = {
 
 export class EditorState {
   public directory;
-  public code: string = undefined;
-  public language: EditorLanguage = 'markdown';
   public options: EditorOptions = {
     lineNumbers: true,
     minimap: {
@@ -65,6 +65,21 @@ export class EditorState {
           'editor.inactiveSelectionBackground': '#88000015'
       }
   };
+
+  public tabs: any[] = [];
+  public selectedTab: number = 0;
+  
+  get code() {
+    return this.tabs[this.selectedTab] &&
+           this.tabs[this.selectedTab].contents;
+  }
+  
+  get language() {
+    const extension = this.tabs[this.selectedTab] &&
+                      this.tabs[this.selectedTab].name.split('.').pop();
+
+    return EditorLanguageMap[extension] || 'text';
+  }
   
   get hidden() {
     return this.code === undefined;
