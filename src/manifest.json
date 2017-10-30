@@ -3,6 +3,7 @@
   "short_name": "IDECOS",
   "description": "An integrated development enviroment for ChromeOS",
   "version": "1.0.0",
+  "manifest_version": 2,
   
   "app": {
     "background": {
@@ -17,7 +18,8 @@
   "icons": {
     "256": "assets/icons/web_hi_res_512.png",
     "128": "assets/icons/web_hi_res_512.png",
-    "64": "assets/icons/web_hi_res_512.png"
+    "64": "assets/icons/web_hi_res_512.png",
+    "16": "assets/icons/web_hi_res_512.png"
   },
   
   "offline_enabled": true,

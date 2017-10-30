@@ -5,6 +5,7 @@ import {
   Output,
   EventEmitter,
   HostListener,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -43,8 +44,19 @@ export class MonacoEditorDirective {
   private _value: string;
 
   constructor(
-    private _element: ElementRef
+    private _element: ElementRef,
+    private cdr: ChangeDetectorRef
   ) { }
+  
+  public ngOnInit() {
+    // FIXME: We are relying on this to detect changes in the editor, and
+    // inform angular to update the rest of the view. We should find a less
+    // hacky way of handling this...
+    this.cdr.detach();
+    setInterval(() => {
+      this.cdr.detectChanges();
+    }, 500);
+  }
   
   private initEditor() {
     this.editor = (window as any).monaco.editor.create(this.element, this.editorSettings);
@@ -100,10 +112,11 @@ export class MonacoEditorDirective {
   onResize(event) {
     // FIXME: This is a hack to get the editor layout to resize with the window
     // correctly. We need it to not be relient on the id in the template.
-    if (this.editor) this.editor.layout({
-      width: this.element.clientWidth,
-      height: document.getElementById('editor').clientHeight - 40,
-    });
+    if (this.editor) this.editor.layout();
+    // {
+    //   width: this.element.clientWidth,
+    //   height: document.getElementById('editor').clientHeight - 40,
+    // }
   }
   
   public updateLanguage(language: string) {

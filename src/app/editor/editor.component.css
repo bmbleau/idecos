@@ -113,6 +113,7 @@ section footer {
   border-top: 1px solid black;
   max-height: 25px;
   cursor: pointer;
+  position: relative;
 }
 
 section footer i {
@@ -121,7 +122,19 @@ section footer i {
   font-size: 14px;
 }
 
-section footer:hover i {
+section footer:hover i.action {
   color: #657B83;
   font-size: 18px;
+}
+
+section footer span.pull-right {
+  color: #657B83;
+  position: absolute;
+  font-size: 12px;
+  right: 10px;
+  bottom: 6px;
+}
+
+section footer span.pull-right i {
+  margin-right: 10px;
 }

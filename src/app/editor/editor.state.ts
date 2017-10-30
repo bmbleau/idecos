@@ -1,4 +1,5 @@
 import { EditorLanguageMap } from './language.map';
+import * as md5 from 'md5';
 
 export type EditorLanguage = 'markdown';
 export type EditorOptions = {
@@ -68,6 +69,12 @@ export class EditorState {
 
   public tabs: any[] = [];
   public selectedTab: number = 0;
+  
+  get saveStates() {
+    return this.tabs.map(tab => {
+      return tab.md5 === md5(tab.contents);
+    });
+  }
   
   get code() {
     return this.tabs[this.selectedTab] &&

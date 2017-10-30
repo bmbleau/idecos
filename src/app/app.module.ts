@@ -19,9 +19,13 @@ import { FileService } from './file.service';
 import { editorReducer } from './editor/editor.reducer';
 import { EditorEffects } from './editor/editor.effects';
 
+import { ContextMenuDirective } from './contextMenu.directive';
+import { ContextMenuService } from './contextMenu.service';
+
 @NgModule({
   declarations: [
     AppComponent,
+    ContextMenuDirective,
     PluginDirective,
     EditorComponent,
     MonacoEditorDirective,
@@ -40,6 +44,7 @@ import { EditorEffects } from './editor/editor.effects';
   providers: [
     PluginService,
     WindowService,
+    ContextMenuService,
     FileService,
   ],
   bootstrap: [AppComponent]

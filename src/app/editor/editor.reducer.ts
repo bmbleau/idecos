@@ -4,11 +4,26 @@ import { EditorState } from './editor.state';
 
 export const EDITOR_DIRECTORY_LOAD = 'editor:directory:load';
 export const EDITOR_TAB_ADD = 'editor:tab:add';
+export const EDITOR_TAB_UPDATE = 'editor:tab:update';
 export const EDITOR_TAB_REMOVE = 'editor:tab:remove';
 export const EDITOR_TAB_SELECT = 'editor:tab:select';
 
 export function editorReducer(state: EditorState = new EditorState(), action: Action) {
 	switch (action.type) {
+	  
+	  case EDITOR_TAB_UPDATE: {
+	    // Only update the contents of the file if it has actually changed.
+	    if (state.tabs[state.selectedTab].contents !== action.payload) {
+	      const tabs = state.tabs.slice(0);
+  	    tabs[state.selectedTab].contents = action.payload;
+  	    
+  	    return Object.assign(new EditorState(), state, {
+  	      tabs,
+  	    });
+	    }
+	    
+	    return state;
+	  }
 
 	  case EDITOR_TAB_ADD: {
 	    const tabs = state.tabs.slice(0);

@@ -7,6 +7,7 @@ export const EditorLanguageMap = {
 
   // Language to Language
   'text': 'text',
+  'css': 'css',
   'javascript': 'javascript',
   'typescript': 'typescript',
   'markdown': 'markdown',
