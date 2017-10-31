@@ -1,6 +1,7 @@
 import { Component, Input, ViewEncapsulation } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { EditorState } from '../editor.state';
+import * as md5 from 'md5';
 
 @Component({
   selector: 'directory',
@@ -15,6 +16,14 @@ export class DirectoryComponent {
   constructor(
     private store$: Store<EditorState>,
   ) { }
+  
+  get hasChanged() {
+    if (this.entry.isFile) {
+      return this.entry.md5 !== md5(this.entry.contents);
+    }
+
+    return false;
+  }
   
   public action() {
     if (this.entry.isFile) {

@@ -142,10 +142,25 @@ export class FileService {
   
   private writeFile([writer, file]) {
     return new Promise((resolve, reject) => {
-      writer.addEventListener('writeend', resolve.bind(this));
+      writer.addEventListener('writeend', (event) => {
+        if (event.returnValue) {
+          resolve(event);
+        }
+      });
       writer.addEventListener('error', reject.bind(this));
-      const blob = new Blob(file, {type: 'text/plain'});
+      const blob = new Blob([file], {type: 'text/plain'});
       writer.write(blob);
+    })
+    .then(response => {
+      console.clear();
+      console.log(writer, file);
+      console.log(response);
+    })
+    .catch(error => {
+      console.clear();
+      console.log(writer, file);
+      console.log(error);
+      alert('error');
     });
   }
 }

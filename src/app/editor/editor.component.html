@@ -19,6 +19,7 @@
              [language]="(editor$ | async).language"
              [options]="(editor$ | async).options"
              [theme]="(editor$ | async).theme"
+             [saveFileHandler]="saveHandler"
              (update)="updateTabContents($event)"
              *ngIf="!(editor$ | async).hidden">
     </article>

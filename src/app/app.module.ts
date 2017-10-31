@@ -22,6 +22,8 @@ import { EditorEffects } from './editor/editor.effects';
 import { ContextMenuDirective } from './contextMenu.directive';
 import { ContextMenuService } from './contextMenu.service';
 
+import { TipsComponent } from './tips/tips.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,10 +33,12 @@ import { ContextMenuService } from './contextMenu.service';
     MonacoEditorDirective,
     LoadingComponent,
     DirectoryComponent,
+    TipsComponent,
   ],
   entryComponents: [
     EditorComponent,
     LoadingComponent,
+    TipsComponent,
   ],
   imports: [
     BrowserModule,

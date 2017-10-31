@@ -3,6 +3,7 @@ import { PluginComponent } from '../plugin/plugin.component';
 import { BehaviorSubject } from 'rxjs/Rx';
 import { FileService } from '../file.service';
 import { Store } from '@ngrx/store';
+import { WindowService } from '../window.service';
 import { EditorState } from './editor.state';
 import * as md5 from 'md5';
 
@@ -16,11 +17,31 @@ export class EditorComponent implements PluginComponent {
   public editor$ = this.store$.select('editor');
   public tabTitles: string[] = [];
   private editor: EditorState;
+  private editorSub;
   
   constructor(
     public FileService: FileService,
+    private window: WindowService,
     private store$: Store<EditorState>,
   ) { }
+  
+  ngOnInit() {
+    this.editorSub = this.editor$.subscribe((state: EditorState) => this.editor = state);
+  }
+  
+  get saveHandler() {
+    return (() => {
+      return this.saveTab.bind(this);
+    }).call(this);
+  }
+  
+  ngOnDestroy() {
+    [
+      this.editorSub
+    ].forEach(sub => {
+      if (sub) sub.unsubscribe();
+    })
+  }
   
   public getTabName(tab) {
     const fileName = tab.name.split('/').pop();
@@ -29,9 +50,17 @@ export class EditorComponent implements PluginComponent {
   }
   
   public updateTabContents(contents) {
+    console.log(contents);
     this.store$.dispatch({
       type: 'editor:tab:update',
       payload: contents,
+    });
+  }
+  
+  public saveTab() {
+    this.store$.dispatch({
+      type: "editor:tab:save",
+      payload: this.editor.tabs[this.editor.selectedTab],
     });
   }
   
