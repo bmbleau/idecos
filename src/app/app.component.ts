@@ -23,6 +23,7 @@ export class AppComponent {
   
   public ngOnInit() {
     this.pluginService.register({icon: 'fa-file-code-o', component: EditorComponent});
+    this.pluginService.register({icon: 'fa-file-text-o', component: LoadingComponent});
     this.pluginService.register({icon: 'fa-book', component: LoadingComponent});
     this.pluginService.register({icon: 'fa-info', component: TipsComponent});
     this.pluginService.register({icon: 'fa-sliders', component: LoadingComponent});
