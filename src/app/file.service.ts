@@ -25,7 +25,6 @@ export class FileService {
   public openDirectory() {
     return this.storage.get('directoryKey')
       .then((storage: { directoryKey: string }) => {
-        console.log(storage.directoryKey);
         if (storage.directoryKey) {
           this.projectId = storage.directoryKey;
           return storage.directoryKey;

@@ -29,6 +29,10 @@ export class AppComponent {
     this.pluginService.update.subscribe(this.loadPlugin.bind(this));
   }
   
+  public disableEvent(event) {
+    return false;
+  }
+  
   private loadPlugin(plugin) {
     if (!plugin) return;
 

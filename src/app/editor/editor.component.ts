@@ -19,6 +19,13 @@ export class EditorComponent implements PluginComponent {
   private editor: EditorState;
   private editorSub;
   
+  public directoryContextMenu = [
+  	{
+  		label: "Close Project",
+  		onclick: this.closeProject.bind(this),
+  	}
+  ];
+  
   constructor(
     public FileService: FileService,
     private window: WindowService,
@@ -43,6 +50,12 @@ export class EditorComponent implements PluginComponent {
     })
   }
   
+  public closeProject() {
+    this.store$.dispatch({
+      type: 'editor:project:close'
+    });
+  }
+  
   public getTabName(tab) {
     const fileName = tab.name.split('/').pop();
     const filePrefix = tab.md5 !== md5(tab.contents) ? '*' : '';
@@ -50,7 +63,6 @@ export class EditorComponent implements PluginComponent {
   }
   
   public updateTabContents(contents) {
-    console.log(contents);
     this.store$.dispatch({
       type: 'editor:tab:update',
       payload: contents,

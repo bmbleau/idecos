@@ -1,5 +1,5 @@
 <div class="plugin-container">
-  <nav class="directory" context-menu="directory">
+  <nav class="directory" [context-menu]="directoryContextMenu">
     <directory [hidden]="false"
                [entry]="(editor$ | async).directory">
     </directory>

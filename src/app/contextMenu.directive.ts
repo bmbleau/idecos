@@ -1,23 +1,25 @@
-import { Directive, ViewContainerRef, Input } from '@angular/core';
-import { ContextMenuService } from './contextMenu.service';
+import { Directive, ViewContainerRef, ElementRef, Input } from '@angular/core';
+import { WindowService } from './window.service';
 
 @Directive({
   selector: '[context-menu]',
 })
 export class ContextMenuDirective {
+  private _menu;
+  @Input('context-menu') set menu(menu) {
+    this._menu = this.window.contextmenu(menu);
+  };
   
   constructor(
-    public viewContainerRef: ViewContainerRef,
-    private ContextMenuService: ContextMenuService,
+    private window: WindowService,
+    private _element: ElementRef,
   ) { }
-  
-  @Input('context-menu') set contextMenu(value) {
-    this.ContextMenuService.contextMenuTypes.push(value);
-    const uniqueMenuTypes = new Set(this.ContextMenuService.contextMenuTypes);
-    this.ContextMenuService.contextMenuTypes = Array.from(uniqueMenuTypes);
+
+  public ngOnInit() {
+    this.window.contextmenu.attach(this.element, this._menu);
   }
-  
-  ngOnInit() {
-    console.log(this.ContextMenuService);
+
+  get element() {
+    return this._element.nativeElement;
   }
 }

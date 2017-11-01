@@ -22,7 +22,6 @@ import { editorReducer } from './editor/editor.reducer';
 import { EditorEffects } from './editor/editor.effects';
 
 import { ContextMenuDirective } from './contextMenu.directive';
-import { ContextMenuService } from './contextMenu.service';
 
 import { TipsComponent } from './tips/tips.component';
 
@@ -50,7 +49,6 @@ import { TipsComponent } from './tips/tips.component';
   providers: [
     PluginService,
     WindowService,
-    ContextMenuService,
     FileService,
     IdentityService,
     StorageService,

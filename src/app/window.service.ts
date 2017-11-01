@@ -33,6 +33,10 @@ export class WindowService {
     return this.window.document;
   }
   
+  get contextmenu() {
+    return this.window.contextmenu;
+  }
+  
   get identity() {
     if (this.isChromeApp) return this.window.chrome.identity;
   }
