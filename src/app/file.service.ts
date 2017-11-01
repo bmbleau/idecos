@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import { WindowService } from './window.service';
 import * as md5 from 'md5';
+import { IdentityService } from './identity.service';
+import { StorageService } from './storage.service';
 
 @Injectable()
 export class FileService {
@@ -10,7 +12,9 @@ export class FileService {
   
   constructor(
     private window: WindowService,
-  ) {}
+    private identity: IdentityService,
+    private storage: StorageService,
+  ) { }
   
   public chooseDirectory(options: { type: string }): Promise<any> {
     return new Promise(resolve => {
@@ -19,12 +23,21 @@ export class FileService {
   }
   
   public openDirectory() {
-    if (this.projectId) {
-      return this.restoreDirectory(this.projectId);
-    } else {
-      return this.chooseDirectory({ type: 'openDirectory' })
-        .then(this.rememberDirectory.bind(this));
-    }
+    return this.storage.get('directoryKey')
+      .then((storage: { directoryKey: string }) => {
+        console.log(storage.directoryKey);
+        if (storage.directoryKey) {
+          this.projectId = storage.directoryKey;
+          return storage.directoryKey;
+        }
+
+        return new Error('Project directory permission request required.');
+      })
+      .then(this.restoreDirectory)
+      .catch((err) => {
+        return this.chooseDirectory({ type: 'openDirectory' })
+          .then(this.rememberDirectory.bind(this));
+      });
   }
   
   public getMetadata(entry) {
@@ -126,7 +139,11 @@ export class FileService {
     return new Promise(resolve => {
       const projectId = this.window.fileSystem.retainEntry(directoryEntry);
       this.projectId = projectId;
-      resolve(directoryEntry);
+      resolve(projectId);
+    }).then((projectId) => {
+      return this.storage.set('directoryKey', projectId);
+    }).then(() => {
+      return directoryEntry;
     });
   }
   
@@ -143,24 +160,16 @@ export class FileService {
   private writeFile([writer, file]) {
     return new Promise((resolve, reject) => {
       writer.addEventListener('writeend', (event) => {
-        if (event.returnValue) {
+        if (!writer.length) {
+          writer.write(blob);
+        } else if (event.returnValue) {
           resolve(event);
         }
       });
       writer.addEventListener('error', reject.bind(this));
+
       const blob = new Blob([file], {type: 'text/plain'});
-      writer.write(blob);
-    })
-    .then(response => {
-      console.clear();
-      console.log(writer, file);
-      console.log(response);
-    })
-    .catch(error => {
-      console.clear();
-      console.log(writer, file);
-      console.log(error);
-      alert('error');
+      writer.truncate(0);
     });
   }
 }

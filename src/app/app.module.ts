@@ -14,6 +14,8 @@ import { LoadingComponent } from './loading/loading.component';
 
 import { WindowService } from './window.service';
 import { FileService } from './file.service';
+import { IdentityService } from './identity.service';
+import { StorageService } from './storage.service';
 
 // reducers
 import { editorReducer } from './editor/editor.reducer';
@@ -50,6 +52,8 @@ import { TipsComponent } from './tips/tips.component';
     WindowService,
     ContextMenuService,
     FileService,
+    IdentityService,
+    StorageService,
   ],
   bootstrap: [AppComponent]
 })

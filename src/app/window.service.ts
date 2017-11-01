@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
+import { IdentityService } from './identity.service';
 
 @Injectable()
 export class WindowService {
+  constructor() {}
+  
   get window(): any {
     return (window as any);
   }
 
   get fileSystem() {
-    if (!!this.window.chrome) {
+    if (this.isChromeApp) {
       return this.window.chrome.fileSystem;
     }
 
@@ -28,5 +31,21 @@ export class WindowService {
   
   get document() {
     return this.window.document;
+  }
+  
+  get identity() {
+    if (this.isChromeApp) return this.window.chrome.identity;
+  }
+  
+  get storage() {
+    if (this.isChromeApp) return this.window.chrome.storage;
+  }
+  
+  get isChromeApp() {
+    return !!this.window.chrome;
+  }
+  
+  get i18n() {
+    if (this.isChromeApp) return this.window.chrome.i18n;
   }
 }
