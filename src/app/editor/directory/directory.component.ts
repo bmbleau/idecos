@@ -25,6 +25,29 @@ export class DirectoryComponent {
     return false;
   }
   
+  public createContextMenu() {
+    const contextMenu = [];
+    
+    if (!this.entry.isFile) {
+      contextMenu.push({ label: 'Toggle Folder', onclick: this.action.bind(this) });
+      contextMenu.push({ hr: true });
+      contextMenu.push({ label: 'Rename Directory' });
+      contextMenu.push({ hr: true });
+      contextMenu.push({ label: 'Move Folder' });
+      contextMenu.push({ label: 'New Folder' });
+      contextMenu.push({ label: 'New File' });
+    } else {
+      contextMenu.push({ label: 'Open File', onclick: this.action.bind(this) });
+      contextMenu.push({ hr: true });
+      contextMenu.push({ label: 'Remove File' });
+      contextMenu.push({ hr: true });
+      contextMenu.push({ label: 'Move File' });
+      contextMenu.push({ label: 'Rename File' });
+    }
+    
+    return contextMenu;
+  }
+  
   public action() {
     if (this.entry.isFile) {
       this.store$.dispatch({

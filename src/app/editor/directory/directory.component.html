@@ -1,5 +1,6 @@
 <ul class="fa-ul" *ngIf="entry">
-  <li (click)="action()">
+  <li (click)="action()"
+      [context-menu]="createContextMenu()">
     <i class="fa-li fa"
        [ngClass]="{
          'fa-folder-open-o': !hidden && entry.isDirectory,
