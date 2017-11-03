@@ -7,6 +7,7 @@ import { Plugin } from './plugin/plugin';
 import { EditorComponent } from './editor/editor.component';
 import { LoadingComponent } from './loading/loading.component';
 import { TipsComponent } from './tips/tips.component';
+import { TerminalComponent } from './terminal/terminal.component';
 
 @Component({
   selector: 'app-root',
@@ -23,9 +24,10 @@ export class AppComponent {
   
   public ngOnInit() {
     this.pluginService.register({icon: 'fa-file-code-o', component: EditorComponent});
-    this.pluginService.register({icon: 'fa-file-text-o', component: LoadingComponent});
-    this.pluginService.register({icon: 'fa-book', component: LoadingComponent});
-    this.pluginService.register({icon: 'fa-info', component: TipsComponent});
+    this.pluginService.register({icon: 'fa-terminal', component: TerminalComponent});
+    // this.pluginService.register({icon: 'fa-file-text-o', component: LoadingComponent});
+    // this.pluginService.register({icon: 'fa-book', component: LoadingComponent});
+    // this.pluginService.register({icon: 'fa-info', component: TipsComponent});
     this.pluginService.register({icon: 'fa-sliders', component: LoadingComponent});
     this.pluginService.update.subscribe(this.loadPlugin.bind(this));
   }

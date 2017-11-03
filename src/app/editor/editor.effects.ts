@@ -33,16 +33,14 @@ export class EditorEffects {
     
     return projectPromises;
   }
-  
-  // On the initalization of the store we dispatch a load
-  // directory action event that injects the directory
-  // filesystem into the state of the application.
+
+
   @Effect({
     dispatch: true,
   })
-  private loadProject$ = this.actions$
+  private initProject$ = this.actions$
     .ofType('@ngrx/store/init')
-    .switchMap((action, index) => {
+    .switchMap(() => {
       const projectPromise = this.openProject();
       return Observable.fromPromise(projectPromise)
         .map(directory => {
@@ -51,6 +49,35 @@ export class EditorEffects {
             payload: directory,
           };
         });
+    });
+  
+  @Effect({
+    dispatch: true,
+  })
+  private newProject$ = this.actions$
+    .ofType('editor:project:new')
+    .switchMap((action, index) => {
+      return Observable.of({
+        type: 'editor:project:close',
+      },{
+        type: 'editor:project:open',
+      });
+    });
+  
+  @Effect({
+    dispatch: true,
+  })
+  private loadProject$ = this.actions$
+    .ofType('editor:project:open')
+    .switchMap((action, index) => {
+      const projectPromise = this.openProject();
+      return Observable.fromPromise(projectPromise);
+    })
+    .switchMap((directory) => {
+      return Observable.from([{
+        type: 'editor:directory:load',
+        payload: directory,
+      }]);
     });
 
 

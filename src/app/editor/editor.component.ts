@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { PluginComponent } from '../plugin/plugin.component';
-import { BehaviorSubject } from 'rxjs/Rx';
+import { BehaviorSubject, Subscription } from 'rxjs/Rx';
 import { FileService } from '../file.service';
 import { Store } from '@ngrx/store';
 import { WindowService } from '../window.service';
@@ -15,16 +15,8 @@ import * as md5 from 'md5';
 export class EditorComponent implements PluginComponent {
   @Input() metadata: any;
   public editor$ = this.store$.select('editor');
-  public tabTitles: string[] = [];
   private editor: EditorState;
-  private editorSub;
-  
-  public directoryContextMenu = [
-  	{
-  		label: "Close Project",
-  		onclick: this.closeProject.bind(this),
-  	}
-  ];
+  private editorSub: Subscription;
   
   constructor(
     public FileService: FileService,
@@ -32,17 +24,11 @@ export class EditorComponent implements PluginComponent {
     private store$: Store<EditorState>,
   ) { }
   
-  ngOnInit() {
+  public ngOnInit() {
     this.editorSub = this.editor$.subscribe((state: EditorState) => this.editor = state);
   }
   
-  get saveHandler() {
-    return (() => {
-      return this.saveTab.bind(this);
-    }).call(this);
-  }
-  
-  ngOnDestroy() {
+  public ngOnDestroy() {
     [
       this.editorSub
     ].forEach(sub => {
@@ -53,6 +39,12 @@ export class EditorComponent implements PluginComponent {
   public closeProject() {
     this.store$.dispatch({
       type: 'editor:project:close'
+    });
+  }
+  
+  public openProject() {
+    this.store$.dispatch({
+      type: 'editor:project:new',
     });
   }
   
@@ -69,10 +61,10 @@ export class EditorComponent implements PluginComponent {
     });
   }
   
-  public saveTab() {
+  public saveTab(index: number = this.editor.selectedTab) {
     this.store$.dispatch({
       type: "editor:tab:save",
-      payload: this.editor.tabs[this.editor.selectedTab],
+      payload: this.editor.tabs[index],
     });
   }
   
@@ -88,5 +80,54 @@ export class EditorComponent implements PluginComponent {
       type: "editor:tab:select",
       payload: index,
     });
+  }
+  
+  public createTabContextMenu(index, tab) {
+    const contextMenu: any[] = [
+      {
+        label: 'Close Tab',
+        onclick: this.removeTab.bind(this, index),
+      }
+    ];
+    
+    if (tab.md5 !== md5(tab.contents)) {
+      contextMenu.push({
+        label: 'Save',
+        onclick: this.saveTab.bind(this, index)
+      });
+    }
+    
+    if (this.editor.tabs.length > 1 && this.editor.selectedTab !== index) {
+      contextMenu.push({
+        label: 'Select Tab',
+        onclick: this.selectTab.bind(this, index),
+      });
+    }
+    
+    return contextMenu;
+  }
+  
+  get saveHandler() {
+    return (() => {
+      return this.saveTab.bind(this);
+    }).call(this);
+  }
+  
+  get directoryContextMenu() {
+    const contextMenu = [];
+
+    if (!!this.editor.directory) {
+      contextMenu.push({
+        label: "Close Project",
+        onclick: this.closeProject.bind(this),
+      });
+    } else {
+      contextMenu.push({
+        label: "Open New Project",
+        onclick: this.openProject.bind(this),
+      });
+    }
+    
+    return contextMenu;
   }
 }

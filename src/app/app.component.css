@@ -28,7 +28,7 @@ nav ul::-webkit-scrollbar {
 
 nav ul li {
   background-color: #002B36;
-  color: #268BD2;
+  color: #657B83;
   padding: 15px;
   height: 20px;
   width: 20px;
@@ -38,13 +38,39 @@ nav ul li {
   text-align: center;
   line-height: 20px;
   font-size: 22px;
-  border: 2px solid #268BD2;
+  border: 2px solid #657B83;
   cursor: pointer;
 }
 
+nav ul li:hover {
+  border-color: #268BD2;
+  color: #268BD2;
+}
+
 nav ul li.active {
-  border-color: #CB4B16;
-  color: #CB4B16;
+  border-color: #268BD2;
+  color: #268BD2;
+}
+
+nav ul li:nth-last-child(2) {
+  margin-bottom: 70px;
+}
+
+nav ul.action-bottom {
+  margin: 0px;
+  margin-top: 30px;
+  padding: 0px;
+  padding-bottom: 5px;
+  height: 60px;
+  position: absolute;
+  bottom: 0;
+  background-color: #073642;
+  border-top: 1px solid #002B36;
+}
+
+nav ul.action-bottom li.action-bottom {
+  border: 2px solid #657B83;
+  color: #657B83;
 }
 
 section {

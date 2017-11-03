@@ -24,10 +24,12 @@
     "@ngrx/core": "^1.2.0",
     "@ngrx/effects": "^2.0.5",
     "@ngrx/store": "^2.2.3",
+    "@types/shelljs": "^0.7.5",
     "@types/text-encoding": "0.0.32",
     "core-js": "^2.4.1",
     "md5": "^2.2.1",
     "rxjs": "^5.4.2",
+    "xterm": "^2.9.2",
     "zone.js": "^0.8.14"
   },
   "devDependencies": {

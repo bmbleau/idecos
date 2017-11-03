@@ -21,7 +21,10 @@ import { StorageService } from './storage.service';
 import { editorReducer } from './editor/editor.reducer';
 import { EditorEffects } from './editor/editor.effects';
 
-import { ContextMenuDirective } from './contextMenu.directive';
+import { TerminalComponent } from './terminal/terminal.component';
+import { TerminalDirective } from './terminal/terminal.directive';
+
+import { ContextMenuDirective } from './contextmenu/contextMenu.directive';
 
 import { TipsComponent } from './tips/tips.component';
 
@@ -35,9 +38,12 @@ import { TipsComponent } from './tips/tips.component';
     LoadingComponent,
     DirectoryComponent,
     TipsComponent,
+    TerminalComponent,
+    TerminalDirective,
   ],
   entryComponents: [
     EditorComponent,
+    TerminalComponent,
     LoadingComponent,
     TipsComponent,
   ],
