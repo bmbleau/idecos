@@ -73,6 +73,11 @@ nav ul.action-bottom li.action-bottom {
   color: #657B83;
 }
 
+nav ul.action-bottom li.action-bottom:hover, nav ul.action-bottom li.action-bottom.active {
+  border-color: #268BD2;
+  color: #268BD2;
+}
+
 section {
   display: flex;
   flex-direction: column;

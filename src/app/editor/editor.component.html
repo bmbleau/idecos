@@ -10,8 +10,7 @@
         <li *ngFor="let tab of (editor$ | async).tabs; let i = index;"
             [ngClass]="{'active': i === (editor$ | async).selectedTab}"
             (click)="$event.which == 2 ? removeTab(i) : selectTab(i)"
-            [context-menu]="createTabContextMenu(i, tab)"
-            (dblclick)="removeTab(i)">
+            [context-menu]="createTabContextMenu(i, tab)">
           {{ getTabName(tab) }}
         </li>
       </ul>
