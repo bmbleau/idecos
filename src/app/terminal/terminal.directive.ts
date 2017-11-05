@@ -35,6 +35,10 @@ export class TerminalDirective {
     this.terminal.write(`${this.user}@${this.server} $ `);
   }
   
+  private clearTerminal() {
+    this.terminal.clear();
+  }
+  
   public ngOnInit() {
     this.terminal.open(this.element, true);
     this.terminal.fit();
@@ -74,6 +78,11 @@ export class TerminalDirective {
   
   @Output() get newLine() {
     if (this.terminal) return this.terminal.writeln.bind(this.terminal, '');
+    return () => {};
+  }
+  
+  @Output() get clear() {
+    if (this.terminal) return this.clearTerminal.bind(this);
     return () => {};
   }
   

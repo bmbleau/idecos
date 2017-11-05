@@ -122,14 +122,49 @@ section footer {
   background-color: #073642;
   border-top: 1px solid black;
   max-height: 25px;
-  cursor: pointer;
   position: relative;
+}
+
+section .clickable {
+  cursor: pointer;
+}
+
+section .terminal-active {
+  min-height: 300px;
+  max-height: 300px;
+  display: block;
+  position: fixed;
+  bottom: 0px;
+  right: 0px;
+  left: calc(86px + 200px);
+  text-align: center;
+  overflow: hidden;
+}
+
+section .terminal-active terminal {
+  position: absolute;
+  bottom: 10px;
+  right: 0px;
+  left: 0px;
+  top: 25px;
+  height: calc(100% - 10px - 25px);
+  width: 100%;
+}
+
+footer main.terminal {
+  left: 0px !important;
 }
 
 section footer i {
   line-height: 25px;
   color: #002B36;
   font-size: 14px;
+}
+
+section footer.terminal-active i {
+  transform: rotate(180deg);
+  text-align: center;
+  width: 100%;
 }
 
 section footer:hover i.action {
@@ -142,7 +177,7 @@ section footer span.pull-right {
   position: absolute;
   font-size: 12px;
   right: 10px;
-  bottom: 6px;
+  top: 5px;
 }
 
 section footer span.pull-right i {

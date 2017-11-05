@@ -1,5 +1,14 @@
-main {
-  height: calc(100vh - 20px);
+main.terminal {
+  height: 100%;
+  width: 100%;
   background-color: black;
   padding: 10px;
+}
+
+main.terminal.standalone {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  left: 65px;
+  top: 0px;
 }

@@ -35,12 +35,23 @@
         </div>
       </div>
     </article>
-    <footer>
+    <footer (click)="toggleTerminal()" class="clickable">
       <i class="fa fa-chevron-up action" aria-hidden="true"></i>
       <span class="pull-right"
             *ngIf="!(editor$ | async).hidden">
         {{ (editor$ | async).language }}
       </span>
+    </footer>
+    <footer [ngClass]="{'terminal-active': !terminalHidden}"
+            *ngIf="!terminalHidden">
+      <i  (click)="toggleTerminal()"
+          class="fa fa-chevron-up action clickable"
+          aria-hidden="true"></i>
+      <span (click)="toggleTerminal()" class="pull-right"
+            *ngIf="!(editor$ | async).hidden">
+        {{ (editor$ | async).language }}
+      </span>
+      <terminal [standalone]="false"></terminal>
     </footer>
   </section>
 </div>

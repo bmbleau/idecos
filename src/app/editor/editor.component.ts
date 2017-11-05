@@ -17,6 +17,7 @@ export class EditorComponent implements PluginComponent {
   public editor$ = this.store$.select('editor');
   private editor: EditorState;
   private editorSub: Subscription;
+  public terminalHidden: boolean = true;
   
   constructor(
     public FileService: FileService,
@@ -109,6 +110,10 @@ export class EditorComponent implements PluginComponent {
     return contextMenu;
   }
   
+  public toggleTerminal() {
+    this.terminalHidden = !this.terminalHidden;
+  }
+
   get saveHandler() {
     return (() => {
       return this.saveTab.bind(this);
