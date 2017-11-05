@@ -28,7 +28,16 @@ export class TerminalDirective {
     this.terminal.open(this.element);
     this.terminal.fit();
     this.terminal.focus();
-    this.writeLocalMessage(`This feature is currently not implemented...`, false);
+    this.terminal.writeln('  _____   _____    ______    _____    ____     _____ ');
+    this.terminal.writeln(' |_   _| |  __ \\  |  ____|  / ____|  / __ \\   / ____|');
+    this.terminal.writeln('   | |   | |  | | | |__    | |      | |  | | | (___  ');
+    this.terminal.writeln('   | |   | |  | | |  __|   | |      | |  | |  \\___ \\ ');
+    this.terminal.writeln('  _| |_  | |__| | | |____  | |____  | |__| |  ____) |');
+    this.terminal.writeln(' |_____| |_____/  |______|  \\_____|  \\____/  |_____/ ');
+    this.terminal.writeln('');
+    this.writeLocalMessage(`This feature is currently not implemented... `);
+    this.terminal.write('idecos@localhost / $ ');
+    
   }
   
   @HostListener('window:resize', ['$event'])
