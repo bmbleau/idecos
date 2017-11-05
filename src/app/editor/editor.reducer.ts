@@ -9,6 +9,16 @@ export const EDITOR_TAB_UPDATE = 'editor:tab:update';
 export const EDITOR_TAB_REMOVE = 'editor:tab:remove';
 export const EDITOR_TAB_SELECT = 'editor:tab:select';
 
+export function findEntry(root, uri) {
+  if (root.fullPath === uri) return root;
+  let directory;
+  root.forEach(entry => {
+    directory = findEntry(entry, uri);
+  });
+  return directory;
+};
+
+
 export function editorReducer(state: EditorState = new EditorState(), action: Action) {
 	switch (action.type) {
 	  

@@ -15,8 +15,9 @@
         </li>
       </ul>
     </nav>
-    <article [monacoEditor]="(editor$ | async).code"
-             [language]="(editor$ | async).language"
+    <article monacoEditor
+             [file]="(editor$ | async).activeFile"
+             [directory]="(editor$ | async).directory"
              [options]="(editor$ | async).options"
              [theme]="(editor$ | async).theme"
              [saveFileHandler]="saveHandler"

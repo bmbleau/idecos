@@ -16,20 +16,20 @@ import { TerminalComponent } from './terminal/terminal.component';
 })
 export class AppComponent {
   @ViewChild(PluginDirective) plugin: PluginDirective;
+  public debug: boolean = true;
   
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
     public pluginService: PluginService,
-  ) { }
+  ) {
+    
+  }
   
   public ngOnInit() {
-    this.pluginService.register({icon: 'fa-file-code-o', component: EditorComponent});
-    this.pluginService.register({icon: 'fa-terminal', component: TerminalComponent});
-    // this.pluginService.register({icon: 'fa-file-text-o', component: LoadingComponent});
-    // this.pluginService.register({icon: 'fa-book', component: LoadingComponent});
-    // this.pluginService.register({icon: 'fa-info', component: TipsComponent});
-    this.pluginService.register({icon: 'fa-sliders', component: LoadingComponent});
-    this.pluginService.update.subscribe(this.loadPlugin.bind(this));
+    this.pluginService.register({type: 'app', icon: 'fa-file-code-o', component: EditorComponent});
+    this.pluginService.register({type: 'app', icon: 'fa-terminal', component: TerminalComponent});
+    this.pluginService.register({type: 'app', icon: 'fa-sliders', component: LoadingComponent});
+    this.pluginService.selectedPlugin.subscribe(this.loadPlugin.bind(this));
   }
   
   public disableEvent(event) {

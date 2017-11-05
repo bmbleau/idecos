@@ -6,64 +6,41 @@ import {
   EventEmitter,
   HostListener,
   ChangeDetectorRef,
-} from '@angular/core';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import { EditorLanguage, EditorTheme, EditorOptions } from './editor.state';
+} from "@angular/core";
 import { WindowService } from '../window.service';
+import { EditorLanguageMap } from './language.map';
 
 @Directive({
-  selector: '[monacoEditor]',
+  selector: "[monacoEditor]",
 })
 export class MonacoEditorDirective {
-  private detectChangeInterval: number;
-  private _language: EditorLanguage;
-  private _value: string;
   private allowResizing: boolean = true;
-  private editor;
-
-  // Use the monacoEditor attribute to get the code/value
-  // to display within the editor.
-  @Input('monacoEditor') set code(code: string) {
-    let value;
-    const _code = typeof code === 'string' ? code : `${code}`;
-    if (_code !== '[object Event]') {
-      if (this.editor) value = this.editor.getModel().getValue();
-      if (this._value !== _code) this._value = _code;
-      if (this.editor && value !== _code) this.editor.getModel().setValue(_code);
-    }
-  }
+  private value: string;
   
-  // take the language passed in on the language attribute
-  // to update the editor's language.
-  @Input() set language(language: EditorLanguage) {
-    if (language !== this._language) {
-      this._language = language;
-      this.updateLanguage(language);
-    }
-  }
+  public editor;
 
-  @Input() options?: EditorOptions;
-  @Input() theme?: EditorTheme;
+  @Input() options;
+  @Input() directory;
+  @Input() file;
+  @Input() theme;
+  @Input() saveFileHandler;
   
-  @Input() saveFileHandler?: Function = () => {};
-
   @Output() public update: EventEmitter<string> = new EventEmitter();
 
   constructor(
     private _element: ElementRef,
-    private window: WindowService,
-    private cdr: ChangeDetectorRef
+    private changeDetector: ChangeDetectorRef,
   ) { }
   
   public ngAfterViewInit() {
     const onGotAmdLoader = () => {
-      (<any>window).require.config({ paths: { 'vs': 'assets/monaco/vs' } });
-      (<any>window).require(['vs/editor/editor.main'], () => {
+      (window as any).require.config({ paths: { 'vs': 'assets/monaco/vs' } });
+      (window as any).require(['vs/editor/editor.main'], () => {
         this.initMonaco();
       });
     };
 
-    if (!(<any>window).require) {
+    if (!(window as any).require) {
       const loaderScript = document.createElement('script');
       loaderScript.type = 'text/javascript';
       loaderScript.src = 'assets/monaco/vs/loader.js';
@@ -74,17 +51,124 @@ export class MonacoEditorDirective {
     }
   }
   
-  private updateLanguage(language: EditorLanguage) {
-    if (this.model) this.monaco.editor
-      .setModelLanguage(this.model, language);
+  public ngOnChanges(changeObject) {
+    if (this.editor && changeObject.file) {
+      const file = changeObject.file.currentValue;
+      const model = this.findModel(file.fullPath);
+      if (model) {
+        this.editor.setModel(model);
+      }
+    }
   }
   
   private digest() {
-    this.cdr.detach();
-    this.cdr.detectChanges();
-    this.cdr.reattach();
+    this.changeDetector.detach()
+    this.changeDetector.detectChanges();
+    this.changeDetector.reattach()
   }
   
+  private initMonaco() {
+    this.configureTypeScript({
+      experimentalDecorators: true,
+      allowNonTsExtensions: true,
+      noEmit: true,
+      noLib: true,
+      target: this.monaco.languages.typescript.ScriptTarget.ES2016,
+      moduleResolution: this.monaco.languages.typescript.ModuleResolutionKind.NodeJs,
+      module: this.monaco.languages.typescript.ModuleKind.CommonJS,
+    });
+
+    this.registerModels(this.directory);
+    this.editor = this.monaco.editor.create(this.element, this.settings);
+    if (this.theme) this.registerTheme('custom', this.theme);
+    
+    this.editor.addCommand([
+      this.monaco.KeyMod.CtrlCmd | this.monaco.KeyCode.KEY_S
+    ], (event) => {
+      this.saveFileHandler();
+      setTimeout(this.digest.bind(this), 500);
+    });
+
+    this.editor
+      .getModel()
+      .onDidChangeContent((_) => {
+        const model = this.editor.getModel();
+        if (model.getValue) {
+          const editorValue = model.getValue();
+          if (editorValue !== this.value) {
+            this.update.next(editorValue);
+            this.digest();
+          } 
+        }
+      });
+
+    this.editor
+      .onDidChangeModel((_) => {
+        console.log(_);
+        const model = this.editor.getModel();
+        if (model.getValue) {
+          const editorValue = model.getValue();
+          if (editorValue !== this.value) {
+            this.update.next(editorValue);
+            this.digest();
+          } 
+        }
+      });
+      
+    const model = this.findModel(this.file.fullPath);
+    if (model) {
+      this.editor.setModel(model);
+    }
+  }
+  
+  private registerTheme(name, theme) {
+    this.monaco.editor.defineTheme(name, this.theme);
+    this.monaco.editor.setTheme(name);
+  }
+  
+  // Recursively goes through all the known files and loads their models
+  // into the editor's instance.
+  private registerModels(entry) {
+    if (!entry) return undefined;
+    if (entry.isFile) {
+      this.registerModel(entry);
+    } else if (entry.isDirectory) {
+      entry.contents.forEach(this.registerModels.bind(this));
+    }
+  }
+
+  // registers a model with the editor, should it already exist we destroy
+  // the old modal to recreate it.
+  private registerModel(entry) {
+    const fullPath = entry.fullPath;
+    
+    // do not reregister models already within the editor.
+    if (this.findModel(fullPath)) return this.findModel(fullPath);
+    
+    const contents = entry.contents;
+    const extension = entry.name.split('.').pop();
+    const language = EditorLanguageMap[extension];
+
+    return this.monaco.editor.createModel(contents, language, fullPath);
+  }
+  
+  private findModel(uri) {
+    return this.models.find(model => model.uri === uri);
+  }
+  
+  private configureTypeScript(settings) {
+    const regex = new RegExp(/^(?=.*\btsconfig\b)(?=.*\bjson\b).*$/);
+    this.directory.contents.forEach(item => {
+      if (regex.test(item.name)) {
+        this.monaco.languages.typescript.typescriptDefaults.setCompilerOptions(Object.assign(
+          {},
+          settings,
+          JSON.parse(item.contents)
+        ));
+      }
+    });
+  }
+
   @HostListener('window:resize', ['$event'])
   private resizeHandler() {
     if (this.allowResizing) {
@@ -109,50 +193,39 @@ export class MonacoEditorDirective {
     }
   }
   
-  private initMonaco() {
-    this.editor = this.monaco.editor.create(this.element, this.editorSettings);
-    if (this.theme) {
-      this.monaco.editor.defineTheme('custom', this.theme);
-      this.monaco.editor.setTheme('custom');
-    }
-    
-    this.editor.addCommand([
-      this.monaco.KeyMod.CtrlCmd | this.monaco.KeyCode.KEY_S
-    ], (event) => {
-      this.saveFileHandler();
-      setTimeout(this.digest.bind(this), 500);
-    });
-
-    this.editor
-      .getModel()
-      .onDidChangeContent((_) => {
-        const editorValue = this.editor.getModel().getValue();
-        if (editorValue !== this._value) {
-          this.update.next(editorValue);
-          this.digest();
-        }
-      });
+  get settings() {
+    return Object.assign({
+      model: this.registerModels.call(this, this.file),
+    }, this.options);
   }
   
-  get editorSettings() {
-    return Object.assign(
-      {
-        value: this._value,
-        language: this._language,
-      },
-      this.options,
-    );
+  set model(model) {
+    if (this.editor) {
+      this.editor.setModel(model);
+    }
   }
   
   get model() {
-    return this.editor && this.editor.getModel() || undefined;
+    if (this.editor) {
+      return this.editor.getModel();
+    }
+    
+    return undefined;
+  }
+  
+  get models() {
+    if (this.monaco && this.monaco.editor) {
+      return this.monaco.editor.getModels();
+    }
+    
+    return [];
+  }
+  
+  get monaco() {
+    return (window as any).monaco;
   }
   
   get element() {
     return this._element.nativeElement;
-  }
-  
-  get monaco(): any {
-    return (window as any).monaco;
   }
 }

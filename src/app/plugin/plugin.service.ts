@@ -3,21 +3,21 @@ import { BehaviorSubject } from 'rxjs/Rx';
 
 @Injectable()
 export class PluginService {
-  public update: BehaviorSubject<any> = new BehaviorSubject(undefined);
+  public selectedPlugin: BehaviorSubject<any> = new BehaviorSubject(undefined);
   public plugins: any[] = [];
   
   public selectPlugin(index) {
     this.plugins.forEach((plugin, _index) => {
       plugin.isSelected = (_index === index);
     });
-    this.update.next(this.metadata);
+    this.selectedPlugin.next(this.metadata);
   }
   
   public register(pluginMetadata) {
     this.plugins.push(Object.assign({
       isSelected: this.metadata ? false : true,
     }, pluginMetadata));
-    this.update.next(this.metadata);
+    this.selectedPlugin.next(this.metadata);
   }
   
   public deregister(pluginMetadata) {

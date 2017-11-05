@@ -31,9 +31,11 @@ export class DirectoryComponent {
     if (!this.entry.isFile) {
       contextMenu.push({ label: 'Toggle Folder', onclick: this.action.bind(this) });
       contextMenu.push({ hr: true });
-      contextMenu.push({ label: 'Rename Directory' });
+      contextMenu.push({ label: 'Remove Folder' });
       contextMenu.push({ hr: true });
       contextMenu.push({ label: 'Move Folder' });
+      contextMenu.push({ label: 'Rename Directory' });
+      contextMenu.push({ hr: true });
       contextMenu.push({ label: 'New Folder' });
       contextMenu.push({ label: 'New File' });
     } else {

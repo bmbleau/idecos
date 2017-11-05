@@ -1,6 +1,6 @@
 import { EditorLanguageMap } from './language.map';
 
-export type EditorLanguage = 'markdown';
+export type EditorLanguage = 'markdown' | 'text' | 'javascript' | 'typescript' | 'python' | 'json' | 'html' | 'css';
 export type EditorOptions = {
   lineNumbers: boolean,
   minimap: {
@@ -68,6 +68,10 @@ export class EditorState {
 
   public tabs: any[] = [];
   public selectedTab: number = 0;
+  
+  get activeFile() {
+    return this.tabs[this.selectedTab];
+  }
   
   get code() {
     return this.tabs[this.selectedTab] &&
