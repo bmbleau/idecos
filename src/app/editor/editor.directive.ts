@@ -81,7 +81,7 @@ export class MonacoEditorDirective {
     this.registerModels(this.directory);
     this.editor = this.monaco.editor.create(this.element, this.settings);
     if (this.theme) this.registerTheme('custom', this.theme);
-    
+
     this.editor.addCommand([
       this.monaco.KeyMod.CtrlCmd | this.monaco.KeyCode.KEY_S
     ], (event) => {
@@ -90,12 +90,13 @@ export class MonacoEditorDirective {
     });
 
     this.editor
-      .getModel()
-      .onDidChangeContent((_) => {
+      .onDidChangeModelContent((_) => {
         const model = this.editor.getModel();
+        console.log(_);
         if (model.getValue) {
           const editorValue = model.getValue();
           if (editorValue !== this.value) {
+            this.value = editorValue;
             this.update.next(editorValue);
             this.digest();
           } 
@@ -104,17 +105,17 @@ export class MonacoEditorDirective {
 
     this.editor
       .onDidChangeModel((_) => {
-        console.log(_);
         const model = this.editor.getModel();
         if (model.getValue) {
           const editorValue = model.getValue();
           if (editorValue !== this.value) {
+            this.value = editorValue;
             this.update.next(editorValue);
             this.digest();
           } 
         }
       });
-      
+
     const model = this.findModel(this.file.fullPath);
     if (model) {
       this.editor.setModel(model);
