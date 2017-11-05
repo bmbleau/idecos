@@ -92,7 +92,6 @@ export class MonacoEditorDirective {
     this.editor
       .onDidChangeModelContent((_) => {
         const model = this.editor.getModel();
-        console.log(_);
         if (model.getValue) {
           const editorValue = model.getValue();
           if (editorValue !== this.value) {

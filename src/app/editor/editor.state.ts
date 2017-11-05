@@ -22,9 +22,9 @@ export type EditorOptions = {
   }
 };
 export type EditorTheme = {
-  base: 'vs';
+  base: 'vs' | 'vs-dark';
   inherit: boolean;
-  rules: {background: string}[];
+  rules: { [name: string ]: string}[];
   colors: { [name: string]: string };
 }
 
@@ -53,7 +53,10 @@ export class EditorState {
   public theme: EditorTheme = {
       base: 'vs',
       inherit: true,
-      rules: [{ background: 'EDF9FA' }],
+      rules: [
+        { background: 'EDF9FA' },
+        { token: 'comment', foreground: '244b56', fontStyle: 'italic' }
+      ],
       colors: {
           'editor.foreground': '#000000',
           'focusBorder': '#657B83',

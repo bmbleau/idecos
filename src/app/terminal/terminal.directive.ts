@@ -1,4 +1,10 @@
-import { Directive, ElementRef, HostListener, Input } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  HostListener,
+  Input,
+  Output,
+} from '@angular/core';
 import * as Terminal from 'xterm';
 
 @Directive({
@@ -6,8 +12,8 @@ import * as Terminal from 'xterm';
 })
 export class TerminalDirective {
   private terminal;
-  private command: string[] = [];
   
+  @Input() user?: string = 'idecos';
   @Input() server?: string = 'localhost';
   @Input() port?: number = 1337;
   
@@ -21,28 +27,54 @@ export class TerminalDirective {
   }
   
   public writeLocalMessage(message: string, newLine: boolean = true) {
-    this.terminal[newLine ? 'writeln' : 'write'](`[IDECOS Terminal] ${message}`);
+    // const date = new Date();
+    this.terminal[newLine ? 'writeln' : 'write'](`> ${message}`);
+  }
+  
+  private _terminalPrompt() {
+    this.terminal.write(`${this.user}@${this.server} $ `);
   }
   
   public ngOnInit() {
-    this.terminal.open(this.element);
+    this.terminal.open(this.element, true);
     this.terminal.fit();
     this.terminal.focus();
-    this.terminal.writeln('  _____   _____    ______    _____    ____     _____ ');
-    this.terminal.writeln(' |_   _| |  __ \\  |  ____|  / ____|  / __ \\   / ____|');
-    this.terminal.writeln('   | |   | |  | | | |__    | |      | |  | | | (___  ');
-    this.terminal.writeln('   | |   | |  | | |  __|   | |      | |  | |  \\___ \\ ');
-    this.terminal.writeln('  _| |_  | |__| | | |____  | |____  | |__| |  ____) |');
-    this.terminal.writeln(' |_____| |_____/  |______|  \\_____|  \\____/  |_____/ ');
-    this.terminal.writeln('');
-    this.writeLocalMessage(`This feature is currently not implemented... `);
-    this.terminal.write('idecos@localhost / $ ');
     
   }
   
   @HostListener('window:resize', ['$event'])
   public onResize() {
     this.terminal.fit();
+  }
+  
+  @Output() get on() {
+    if (this.terminal) return this.terminal.on.bind(this.terminal);
+    return (type, cb) => {};
+  }
+  
+  @Output() get terminalPrompt() {
+    if (this.terminal) return this._terminalPrompt.bind(this);
+    return () => {};
+  }
+  
+  @Output() get print() {
+    if (this.terminal) return this.terminal.write.bind(this.terminal);
+    return () => {};
+  }
+  
+  @Output() get write() {
+    if (this.terminal) return this.writeLocalMessage.bind(this);
+    return () => {};
+  }
+  
+  @Output() get writeln() {
+    if (this.terminal) return this.terminal.writeln.bind(this.terminal);
+    return () => {};
+  }
+  
+  @Output() get newLine() {
+    if (this.terminal) return this.terminal.writeln.bind(this.terminal, '');
+    return () => {};
   }
   
   get element() {

@@ -83,12 +83,14 @@ export class EditorComponent implements PluginComponent {
   }
   
   public createTabContextMenu(index, tab) {
-    const contextMenu: any[] = [
-      {
+    const contextMenu: any[] = [];
+    
+    if (index === this.editor.selectedTab) {
+      contextMenu.push({
         label: 'Close Tab',
         onclick: this.removeTab.bind(this, index),
-      }
-    ];
+      });
+    }
     
     if (tab.md5 !== md5(tab.contents)) {
       contextMenu.push({

@@ -4,6 +4,14 @@
   height: 100vh;
 }
 
+.link {
+  color: #6698b7;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
 nav.directory {
   display: flex;
   /*flex: 5;*/

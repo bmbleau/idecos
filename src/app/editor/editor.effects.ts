@@ -33,6 +33,52 @@ export class EditorEffects {
     
     return projectPromises;
   }
+  
+  private openDirectory(_directory?) {
+    const readDirectory = this.FileService.readDirectory;
+    const processSingleDirectory = this.FileService.processSingleDirectory;
+    const processFiles = this.FileService.processFiles;
+    let rootDirectory;
+
+    const initPromise = !!_directory ?
+      Promise.resolve(_directory) :
+      this.FileService.openDirectory();
+
+    const projectPromises = initPromise
+      .then(directory => {
+        rootDirectory = directory;
+        return directory;
+      })
+      .then(readDirectory)
+      .then(processSingleDirectory)
+      .then(processFiles)
+      .then(subEntries => {
+        rootDirectory.contents = subEntries;
+        console.log(rootDirectory);
+        return rootDirectory;
+      });
+    
+    return projectPromises;
+  }
+  
+  @Effect({
+    dispatch: true,
+  })
+  private updateFileTree$ = this.actions$
+    .ofType('EDITOR:OPEN:DIRECTORY')
+    .switchMap((action) => {
+      const directoryPromise = this.openDirectory(action.payload)
+      return Observable.fromPromise(directoryPromise)
+        .map(directory => {
+          return {
+            type: 'editor:directory:update',
+            payload: {
+              child: directory,
+              parent: action.payload,
+            },
+          };
+        });
+    });
 
 
   @Effect({

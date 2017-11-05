@@ -4,6 +4,7 @@ import { EditorState } from './editor.state';
 
 export const EDITOR_DIRECTORY_LOAD = 'editor:directory:load';
 export const EDITOR_DIRECTORY_UNLOAD = 'editor:directory:unload';
+export const EDITOR_DIRECTORY_UPDATE = 'editor:directory:update';
 export const EDITOR_TAB_ADD = 'editor:tab:add';
 export const EDITOR_TAB_UPDATE = 'editor:tab:update';
 export const EDITOR_TAB_REMOVE = 'editor:tab:remove';
@@ -78,6 +79,12 @@ export function editorReducer(state: EditorState = new EditorState(), action: Ac
 	  case EDITOR_DIRECTORY_UNLOAD: {
 	    const newState = Object.assign(new EditorState(), state);
 	    newState.directory = undefined;
+	    return newState;
+	  }
+	  
+	  case EDITOR_DIRECTORY_UPDATE: {
+	    const newState = Object.assign(new EditorState(), state);
+	    console.log(newState.directory);
 	    return newState;
 	  }
 

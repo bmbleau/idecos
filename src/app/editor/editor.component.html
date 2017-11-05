@@ -29,7 +29,9 @@
       <div class="row">
         <div class="column">
           <div class="logo">IDECOS</div>
-          <p>Open a document to get started</p>
+          <p *ngIf="(editor$ | async).directory">Open a document to get started</p>
+          <p *ngIf="!(editor$ | async).directory"
+             (click)="openProject()">Open a project to get started</p>
         </div>
       </div>
     </article>

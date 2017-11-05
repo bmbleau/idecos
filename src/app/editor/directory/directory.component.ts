@@ -25,6 +25,13 @@ export class DirectoryComponent {
     return false;
   }
   
+  public openDirectory(entry) {
+    this.store$.dispatch({
+      type: 'EDITOR:OPEN:DIRECTORY',
+      payload: entry,
+    });
+  }
+  
   public createContextMenu() {
     const contextMenu = [];
     
@@ -58,6 +65,9 @@ export class DirectoryComponent {
       });
     } else {
       this.hidden = !this.hidden;
+      if (!this.hidden) {
+        this.openDirectory(this.entry);
+      }
     }
   }
 }

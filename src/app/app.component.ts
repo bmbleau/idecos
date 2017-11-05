@@ -26,8 +26,8 @@ export class AppComponent {
   }
   
   public ngOnInit() {
-    this.pluginService.register({type: 'app', icon: 'fa-file-code-o', component: EditorComponent});
     this.pluginService.register({type: 'app', icon: 'fa-terminal', component: TerminalComponent});
+    this.pluginService.register({type: 'app', icon: 'fa-file-code-o', component: EditorComponent});
     this.pluginService.register({type: 'app', icon: 'fa-sliders', component: LoadingComponent});
     this.pluginService.selectedPlugin.subscribe(this.loadPlugin.bind(this));
   }

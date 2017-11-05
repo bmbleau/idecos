@@ -55,6 +55,14 @@ export class FileService {
     return this._processDirectory.bind(this);
   }
   
+  public processSingleDirectory(entries) {
+    if (!Array.isArray(entries)) entries = [entries];
+    return Promise.all(entries.map(entry => {
+      if (entry.isDirectory) entry.contents = [];
+      return Promise.resolve(entry);
+    }))
+  }
+  
   private _processDirectory(entries) {
     if (!Array.isArray(entries)) entries = [entries];
     return Promise.all(entries.map((entry => {
