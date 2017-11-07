@@ -12,6 +12,7 @@ import * as md5 from 'md5';
 export class DirectoryComponent {
   @Input() entry;
   @Input() hidden: boolean = true;
+  @Input() root: boolean = false;
   
   constructor(
     private store$: Store<EditorState>,
@@ -27,8 +28,20 @@ export class DirectoryComponent {
   
   public openDirectory(entry) {
     this.store$.dispatch({
-      type: 'EDITOR:OPEN:DIRECTORY',
+      type: 'editor:open:directory',
       payload: entry,
+    });
+  }
+  
+  public closeProject() {
+    this.store$.dispatch({
+      type: 'editor:project:close'
+    });
+  }
+  
+  public openProject() {
+    this.store$.dispatch({
+      type: 'editor:project:new',
     });
   }
   
@@ -38,11 +51,17 @@ export class DirectoryComponent {
     if (!this.entry.isFile) {
       contextMenu.push({ label: 'Toggle Folder', onclick: this.action.bind(this) });
       contextMenu.push({ hr: true });
-      contextMenu.push({ label: 'Remove Folder' });
-      contextMenu.push({ hr: true });
-      contextMenu.push({ label: 'Move Folder' });
-      contextMenu.push({ label: 'Rename Directory' });
-      contextMenu.push({ hr: true });
+      if (!this.root) {
+        contextMenu.push({ label: 'Remove Folder' });
+        contextMenu.push({ hr: true });
+        contextMenu.push({ label: 'Move Folder' });
+        contextMenu.push({ label: 'Rename Folder' });
+        contextMenu.push({ hr: true });
+      } else {
+        contextMenu.push({ label: 'Close Project', onclick: this.closeProject.bind(this) });
+        contextMenu.push({ label: 'Open New Project', onclick: this.openProject.bind(this) });
+        contextMenu.push({ hr: true });
+      }
       contextMenu.push({ label: 'New Folder' });
       contextMenu.push({ label: 'New File' });
     } else {
@@ -65,7 +84,7 @@ export class DirectoryComponent {
       });
     } else {
       this.hidden = !this.hidden;
-      if (!this.hidden) {
+      if (!this.hidden && !this.entry.contents.length) {
         this.openDirectory(this.entry);
       }
     }

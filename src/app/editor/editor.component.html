@@ -1,6 +1,7 @@
 <div class="plugin-container">
   <nav class="directory" [context-menu]="directoryContextMenu">
     <directory [hidden]="false"
+               [root]="true"
                [entry]="(editor$ | async).directory">
     </directory>
   </nav>

@@ -7,7 +7,7 @@ main.terminal {
 
 main.terminal.standalone {
   position: absolute;
-  bottom: 0px;
+  bottom: 20px;
   right: 0px;
   left: 65px;
   top: 0px;

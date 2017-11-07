@@ -2,7 +2,8 @@ import { Component, Input, ViewChild } from '@angular/core';
 import { PluginComponent } from '../plugin/plugin.component';
 import { Store } from '@ngrx/store';
 import { TerminalDirective } from './terminal.directive';
-import { echo, dispatch, help } from './programs';
+import { echo, dispatch, help, ls, app } from './programs';
+import { Subscription } from 'rxjs/Rx';
 
 @Component({
   selector: 'terminal',
@@ -17,10 +18,13 @@ export class TerminalComponent implements PluginComponent {
   
   private _programs = {
     echo,
+    ls,
     dispatch,
     help,
+    app,
     clear: (terminal, args) => {
       this.terminal.clear();
+      return null;
     },
   };
   
@@ -39,45 +43,64 @@ export class TerminalComponent implements PluginComponent {
     this.terminal.on('click', (event) => {
       event.preventDefault();
       return false;
-    })
+    });
   }
   
   private onLineFeed(key, event) {
-    if (event.key === 'Enter') {
-      const commandArgs = this.command.join('').split(/\s/);
-      const command = commandArgs.shift();
-      this.command = [];
-      this.terminal.newLine();
-      
-      // find and execute the program.
-      new Promise((resolve, reject) => {
-        const program = this.programs.find((program: any, index: number, programs: any[]) => {
-          return program.name === command;
-        });
+    switch (event.key) {
+      case 'Enter': {
+        const commandArgs = this.command.join('').split(/\s/);
+        const command = commandArgs.shift();
+        this.command = [];
+        this.terminal.newLine();
         
-        if (program) resolve(program);
-        reject(`Unable to execute command ${command} with args ${commandArgs}`);
-      }).then((program: any) => {
-        program.script.call(this, this.terminal, commandArgs);
-      }).catch(err => {
-        this.terminal.write(`${err}`);
-      }).then(() => {
-        this.terminal.terminalPrompt();
-      });
+        // find and execute the program.
+        new Promise((resolve, reject) => {
+          const program = this.programs.find((program: any, index: number, programs: any[]) => {
+            return program.name === command;
+          });
+          
+          if (program) resolve(program);
+          reject(`Unable to execute command ${command} with args ${commandArgs}`);
+        }).then((program: any) => {
+          return program.script.call(this, this.terminal, commandArgs);
+        }).catch(err => {
+          this.terminal.write(`${err}`);
+          this.terminal.terminalPrompt();
+        }).then((response) => {
+          if (Array.isArray(response)) {
+            response.forEach(this.terminal.writeln.bind(this));
+          } else if (response === null) {
+          } else {
+            this.terminal.writeln(response.toString());
+          }
+          this.terminal.terminalPrompt();
+        });
+        break;
+      }
+      case 'Backspace': {
+        this.terminal.backspace(this.command);
+      }
     }
   }
-  
+
   private onKeypress(key, event) {
     this.terminal.print(key);
     this.command.push(key);
   }
   
-  get programs() {
+  @Input() get programs() {
     return Object.keys(this._programs).map(name => {
       return {
         name,
         script: this._programs[name],
       };
     });
+  }
+
+  get state() {
+    let state = null;
+    this.store$.take(1).subscribe(_state => state = _state);
+    return state;
   }
 }

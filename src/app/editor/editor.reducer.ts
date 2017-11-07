@@ -39,11 +39,16 @@ export function editorReducer(state: EditorState = new EditorState(), action: Ac
 
 	  case EDITOR_TAB_ADD: {
 	    const tabs = state.tabs.slice(0);
-	    tabs.push(action.payload);
+	    
+	    if (action.payload) {
+	      tabs.push(action.payload);
 
-	    return Object.assign(new EditorState(), state, {
-	      tabs
-	    });
+  	    return Object.assign(new EditorState(), state, {
+  	      tabs
+  	    });
+	    }
+	    
+	    return state;
 	  }
 	  
 	  case EDITOR_TAB_REMOVE: {
@@ -65,15 +70,23 @@ export function editorReducer(state: EditorState = new EditorState(), action: Ac
 	  }
 	  
 	  case EDITOR_TAB_SELECT: {
-	    return Object.assign(new EditorState(), state, {
-	      selectedTab: action.payload,
-	    });
+	    if (action.payload) {
+	      return Object.assign(new EditorState(), state, {
+  	      selectedTab: action.payload,
+  	    });
+	    }
+	    
+	    return state;
 	  }
 	  
 	  case EDITOR_DIRECTORY_LOAD: {
-	    return Object.assign(new EditorState(), state, {
-	      directory: action.payload,
-	    });
+	    if (action.payload) {
+  	    return Object.assign(new EditorState(), state, {
+  	      directory: action.payload,
+  	    });
+	    }
+
+	    return state;
 	  }
 	  
 	  case EDITOR_DIRECTORY_UNLOAD: {
@@ -84,7 +97,6 @@ export function editorReducer(state: EditorState = new EditorState(), action: Ac
 	  
 	  case EDITOR_DIRECTORY_UPDATE: {
 	    const newState = Object.assign(new EditorState(), state);
-	    console.log(newState.directory);
 	    return newState;
 	  }
 

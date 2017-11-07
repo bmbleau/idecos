@@ -5,4 +5,6 @@ export function dispatch(terminal, args) {
     type,
     payload
   });
+  
+  return null;
 }

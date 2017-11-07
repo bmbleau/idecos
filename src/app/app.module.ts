@@ -20,6 +20,7 @@ import { StorageService } from './storage.service';
 // reducers
 import { editorReducer } from './editor/editor.reducer';
 import { EditorEffects } from './editor/editor.effects';
+import { AppEffects } from './app.effects';
 
 import { TerminalComponent } from './terminal/terminal.component';
 import { TerminalDirective } from './terminal/terminal.directive';
@@ -51,6 +52,7 @@ import { TipsComponent } from './tips/tips.component';
     BrowserModule,
     StoreModule.provideStore({ editor: editorReducer }),
     EffectsModule.run(EditorEffects),
+    EffectsModule.run(AppEffects),
   ],
   providers: [
     PluginService,

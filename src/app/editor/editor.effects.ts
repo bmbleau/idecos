@@ -54,7 +54,6 @@ export class EditorEffects {
       .then(processFiles)
       .then(subEntries => {
         rootDirectory.contents = subEntries;
-        console.log(rootDirectory);
         return rootDirectory;
       });
     
@@ -65,7 +64,7 @@ export class EditorEffects {
     dispatch: true,
   })
   private updateFileTree$ = this.actions$
-    .ofType('EDITOR:OPEN:DIRECTORY')
+    .ofType('editor:open:directory')
     .switchMap((action) => {
       const directoryPromise = this.openDirectory(action.payload)
       return Observable.fromPromise(directoryPromise)
@@ -87,7 +86,7 @@ export class EditorEffects {
   private initProject$ = this.actions$
     .ofType('@ngrx/store/init')
     .switchMap(() => {
-      const projectPromise = this.openProject();
+      const projectPromise = this.openDirectory();
       return Observable.fromPromise(projectPromise)
         .map(directory => {
           return {
@@ -109,6 +108,25 @@ export class EditorEffects {
         type: 'editor:project:open',
       });
     });
+    
+  @Effect({
+    dispatch: true,
+  })
+  private openAllDirectories$ = this.actions$
+    .ofType('editor:project:open_all')
+    .switchMap((action) => {
+      const directoryPromise = this.openProject()
+      return Observable.fromPromise(directoryPromise)
+        .map(directory => {
+          return {
+            type: 'editor:directory:update',
+            payload: {
+              child: directory,
+              parent: action.payload,
+            },
+          };
+        });
+    });
   
   @Effect({
     dispatch: true,
@@ -116,7 +134,7 @@ export class EditorEffects {
   private loadProject$ = this.actions$
     .ofType('editor:project:open')
     .switchMap((action, index) => {
-      const projectPromise = this.openProject();
+      const projectPromise = this.openDirectory();
       return Observable.fromPromise(projectPromise);
     })
     .switchMap((directory) => {

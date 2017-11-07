@@ -5,6 +5,21 @@ import { IdentityService } from './identity.service';
 export class WindowService {
   constructor() {}
   
+  public close() {
+    if (this.isChromeApp) return this.window.chrome.app.window.current().close();
+    return this.window.close();
+  }
+  
+  public minimize() {
+    if (this.isChromeApp) return this.window.chrome.app.window.current().minimize();
+    throw new Error('API Error: Unable to minimize browser window');
+  }
+  
+  public restore() {
+    if (this.isChromeApp) return this.window.chrome.app.window.current().restore();
+    throw new Error('API Error: Unable to restore browser window');
+  }
+  
   get window(): any {
     return (window as any);
   }

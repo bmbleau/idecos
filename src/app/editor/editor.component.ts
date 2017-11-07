@@ -30,11 +30,7 @@ export class EditorComponent implements PluginComponent {
   }
   
   public ngOnDestroy() {
-    [
-      this.editorSub
-    ].forEach(sub => {
-      if (sub) sub.unsubscribe();
-    })
+    this.editorSub.unsubscribe();
   }
   
   public closeProject() {
