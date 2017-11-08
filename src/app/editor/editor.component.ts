@@ -4,6 +4,7 @@ import { BehaviorSubject, Subscription } from 'rxjs/Rx';
 import { FileService } from '../file.service';
 import { Store } from '@ngrx/store';
 import { WindowService } from '../window.service';
+import { FeatureService } from './feature/feature.service';
 import { EditorState } from './editor.state';
 import * as md5 from 'md5';
 
@@ -14,11 +15,13 @@ import * as md5 from 'md5';
 })
 export class EditorComponent implements PluginComponent {
   @Input() metadata: any;
+  public position: string;
   public editor$ = this.store$.select('editor');
   public terminalHidden: boolean = true;
   
   constructor(
     public FileService: FileService,
+    private FeatureService: FeatureService,
     private window: WindowService,
     private store$: Store<EditorState>,
   ) { }
@@ -27,6 +30,18 @@ export class EditorComponent implements PluginComponent {
     let state = undefined;
     this.editor$.take(1).subscribe(_state => state = _state);
     return state;
+  }
+
+  public updatePosition(event) {
+    const hasFeatureColLine = this.FeatureService.hasFeature(
+      this.editor.language,
+      'colLine'
+    );
+    if (hasFeatureColLine && event.column) {
+      this.position = `Col ${event.column} Line ${event.lineNumber}`;
+    } else {
+      this.position = '';
+    }
   }
   
   public closeProject() {

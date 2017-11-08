@@ -23,6 +23,7 @@
              [theme]="(editor$ | async).theme"
              [saveFileHandler]="saveHandler"
              (update)="updateTabContents($event)"
+             (position)="updatePosition($event)"
              *ngIf="!(editor$ | async).hidden">
     </article>
     <article class="empty"
@@ -42,6 +43,10 @@
             *ngIf="!(editor$ | async).hidden">
         {{ (editor$ | async).language }}
       </span>
+      <span class="pull-left"
+            *ngIf="!(editor$ | async).hidden">
+        {{ position }}
+      </span>
     </footer>
     <footer [ngClass]="{'terminal-active': !terminalHidden}"
             *ngIf="!terminalHidden">
@@ -51,6 +56,10 @@
       <span (click)="toggleTerminal()" class="pull-right"
             *ngIf="!(editor$ | async).hidden">
         {{ (editor$ | async).language }}
+      </span>
+      <span class="pull-left"
+            *ngIf="!(editor$ | async).hidden">
+        {{ position }}
       </span>
       <terminal [standalone]="false"></terminal>
     </footer>

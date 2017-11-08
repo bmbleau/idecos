@@ -211,7 +211,6 @@ export class EditorEffects {
           payload: (action.payload.tabs.length - index) - 1,
         };
       });
-      console.log(tabsToClose);
       return Observable.from(tabsToClose);
     });
 }

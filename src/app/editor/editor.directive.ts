@@ -26,6 +26,10 @@ export class MonacoEditorDirective {
   @Input() saveFileHandler;
   
   @Output() public update: EventEmitter<string> = new EventEmitter();
+  @Output() public position: EventEmitter<{
+    column: number,
+    lineNumber: number,
+  }> = new EventEmitter();
 
   constructor(
     private _element: ElementRef,
@@ -104,6 +108,7 @@ export class MonacoEditorDirective {
 
     this.editor
       .onDidChangeModel((_) => {
+        this.position.next({ lineNumber: 0, column: 0 } );
         const model = this.editor.getModel();
         if (model.getValue) {
           const editorValue = model.getValue();
@@ -113,6 +118,15 @@ export class MonacoEditorDirective {
             this.digest();
           } 
         }
+      });
+
+    this.editor
+      .onDidChangeCursorPosition((event) => {
+        this.position.next({
+          lineNumber: event.position.lineNumber,
+          column: event.position.column
+        });
+        this.digest();
       });
 
     const model = this.findModel(this.file.fullPath);

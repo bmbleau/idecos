@@ -8,6 +8,7 @@ import { PluginDirective } from './plugin/plugin.directive';
 import { PluginService } from './plugin/plugin.service';
 
 import { EditorComponent } from './editor/editor.component';
+import { FeatureService } from './editor/feature/feature.service';
 import { DirectoryComponent } from './editor/directory/directory.component';
 import { MonacoEditorDirective } from './editor/editor.directive';
 import { LoadingComponent } from './loading/loading.component';
@@ -63,6 +64,7 @@ import { TipsComponent } from './tips/tips.component';
     FileService,
     IdentityService,
     StorageService,
+    FeatureService,
   ],
   bootstrap: [AppComponent]
 })

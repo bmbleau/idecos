@@ -183,3 +183,15 @@ section footer span.pull-right {
 section footer span.pull-right i {
   margin-right: 10px;
 }
+
+section footer span.pull-left {
+  color: #657B83;
+  position: absolute;
+  font-size: 12px;
+  left: 10px;
+  top: 5px;
+}
+
+section footer span.pull-left i {
+  margin-left: 10px;
+}
