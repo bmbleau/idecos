@@ -7,7 +7,7 @@ export const EditorFeatureMap: {
     colLine: true,
   },
   'json': {
-    colLine: false,
+    colLine: true,
   },
   'python': {
     colLine: true,
