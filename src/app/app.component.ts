@@ -8,6 +8,7 @@ import { EditorComponent } from './editor/editor.component';
 import { LoadingComponent } from './loading/loading.component';
 import { TipsComponent } from './tips/tips.component';
 import { TerminalComponent } from './terminal/terminal.component';
+import { SettingsComponent } from './settings/settings.component';
 
 @Component({
   selector: 'app-root',
@@ -28,8 +29,12 @@ export class AppComponent {
   public ngOnInit() {
     this.pluginService.register({type: 'app', icon: 'fa-file-code-o', component: EditorComponent});
     this.pluginService.register({type: 'app', icon: 'fa-terminal', component: TerminalComponent});
-    this.pluginService.register({type: 'app', icon: 'fa-sliders', component: LoadingComponent});
+    this.pluginService.register({type: 'app', icon: 'fa-sliders', component: SettingsComponent});
     this.pluginService.selectedPlugin.subscribe(this.loadPlugin.bind(this));
+  }
+  
+  public createEditor() {
+    this.pluginService.register({type: 'app', icon: 'fa-sliders', component: LoadingComponent});
   }
   
   public disableEvent(event) {

@@ -179,4 +179,16 @@ export class FileService {
       writer.truncate(0);
     });
   }
+  
+  public newFile(directory, name) {
+    return new Promise((resolve, reject) => {
+      directory.getFile(name, {create: true}, resolve.bind(this));
+    });
+  }
+  
+  public createDirectory(directory, name) {
+    return new Promise((resolve, reject) => {
+      directory.getDirectory(name, { create: true }, resolve.bind(this));
+    });
+  }
 }

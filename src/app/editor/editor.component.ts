@@ -84,6 +84,12 @@ export class EditorComponent implements PluginComponent {
     });
     
     contextMenu.push({
+      label: 'Close All Tabs'
+    });
+    
+    contextMenu.push({ hr: true });
+  
+    contextMenu.push({
       label: 'Select Tab',
       onclick: this.selectTab.bind(this, index),
     });

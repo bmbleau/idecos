@@ -11,6 +11,7 @@ import { EditorComponent } from './editor/editor.component';
 import { DirectoryComponent } from './editor/directory/directory.component';
 import { MonacoEditorDirective } from './editor/editor.directive';
 import { LoadingComponent } from './loading/loading.component';
+import { SettingsComponent } from './settings/settings.component';
 
 import { WindowService } from './window.service';
 import { FileService } from './file.service';
@@ -41,12 +42,14 @@ import { TipsComponent } from './tips/tips.component';
     TipsComponent,
     TerminalComponent,
     TerminalDirective,
+    SettingsComponent,
   ],
   entryComponents: [
     EditorComponent,
     TerminalComponent,
     LoadingComponent,
     TipsComponent,
+    SettingsComponent,
   ],
   imports: [
     BrowserModule,
