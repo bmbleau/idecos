@@ -3,6 +3,7 @@ import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { FileService } from '../file.service';
 import { StorageService } from '../storage.service';
+import { Store } from '@ngrx/store';
 
 @Injectable()
 export class EditorEffects {
@@ -10,6 +11,7 @@ export class EditorEffects {
     private actions$: Actions,
     private FileService: FileService,
     private StorageService: StorageService,
+    private store$: Store<any>,
   ) { }
   
   private openProject() {
@@ -188,5 +190,28 @@ export class EditorEffects {
         type: 'editor:open:directory',
         payload: action.payload,
       });
+    });
+
+  @Effect({
+    dispatch: true,
+  })
+  private closeAllTabs$ = this.actions$
+    .ofType('editor:tabs:remove')
+    .withLatestFrom(this.store$)
+    .map(([action, state]: [any, any]) => {
+      action.payload = Object.assign(action.payload || {}, {
+        tabs: state['editor'].tabs.slice(0),
+      });
+      return action;
+    }) 
+    .switchMap(action => {
+      const tabsToClose = action.payload.tabs.map((tab, index) => {
+        return {
+          type: 'editor:tab:remove',
+          payload: (action.payload.tabs.length - index) - 1,
+        };
+      });
+      console.log(tabsToClose);
+      return Observable.from(tabsToClose);
     });
 }

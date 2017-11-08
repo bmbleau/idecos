@@ -25,7 +25,7 @@ export class EditorComponent implements PluginComponent {
 
   private get editor(): EditorState {
     let state = undefined;
-    this.editor$.take(1).subscribe(_state => state);
+    this.editor$.take(1).subscribe(_state => state = _state);
     return state;
   }
   
@@ -60,6 +60,12 @@ export class EditorComponent implements PluginComponent {
       payload: this.editor.tabs[index],
     });
   }
+
+  public removeTabs() {
+    this.store$.dispatch({
+      type: "editor:tabs:remove"
+    });
+  }
   
   public removeTab(index) {
     this.store$.dispatch({
@@ -84,7 +90,8 @@ export class EditorComponent implements PluginComponent {
     });
     
     contextMenu.push({
-      label: 'Close All Tabs'
+      label: 'Close All Tabs',
+      onclick: this.removeTabs.bind(this),
     });
     
     contextMenu.push({ hr: true });
