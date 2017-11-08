@@ -70,7 +70,7 @@ export function editorReducer(state: EditorState = new EditorState(), action: Ac
 	  }
 	  
 	  case EDITOR_TAB_SELECT: {
-	    if (action.payload) {
+	    if (action.payload !== undefined) {
 	      return Object.assign(new EditorState(), state, {
   	      selectedTab: action.payload,
   	    });

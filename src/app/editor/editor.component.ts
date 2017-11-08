@@ -15,8 +15,6 @@ import * as md5 from 'md5';
 export class EditorComponent implements PluginComponent {
   @Input() metadata: any;
   public editor$ = this.store$.select('editor');
-  private editor: EditorState;
-  private editorSub: Subscription;
   public terminalHidden: boolean = true;
   
   constructor(
@@ -24,13 +22,11 @@ export class EditorComponent implements PluginComponent {
     private window: WindowService,
     private store$: Store<EditorState>,
   ) { }
-  
-  public ngOnInit() {
-    this.editorSub = this.editor$.subscribe((state: EditorState) => this.editor = state);
-  }
-  
-  public ngOnDestroy() {
-    this.editorSub.unsubscribe();
+
+  private get editor(): EditorState {
+    let state = undefined;
+    this.editor$.take(1).subscribe(_state => state);
+    return state;
   }
   
   public closeProject() {
@@ -81,27 +77,16 @@ export class EditorComponent implements PluginComponent {
   
   public createTabContextMenu(index, tab) {
     const contextMenu: any[] = [];
+  
+    contextMenu.push({
+      label: 'Close Tab',
+      onclick: this.removeTab.bind(this, index),
+    });
     
-    if (index === this.editor.selectedTab) {
-      contextMenu.push({
-        label: 'Close Tab',
-        onclick: this.removeTab.bind(this, index),
-      });
-    }
-    
-    if (tab.md5 !== md5(tab.contents)) {
-      contextMenu.push({
-        label: 'Save',
-        onclick: this.saveTab.bind(this, index)
-      });
-    }
-    
-    if (this.editor.tabs.length > 1 && this.editor.selectedTab !== index) {
-      contextMenu.push({
-        label: 'Select Tab',
-        onclick: this.selectTab.bind(this, index),
-      });
-    }
+    contextMenu.push({
+      label: 'Select Tab',
+      onclick: this.selectTab.bind(this, index),
+    });
     
     return contextMenu;
   }
@@ -119,7 +104,7 @@ export class EditorComponent implements PluginComponent {
   get directoryContextMenu() {
     const contextMenu = [];
 
-    if (!!this.editor.directory) {
+    if (this.editor && !!this.editor.directory) {
       contextMenu.push({
         label: "Close Project",
         onclick: this.closeProject.bind(this),
