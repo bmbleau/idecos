@@ -15,8 +15,7 @@ export class TerminalDirective {
   private history = [];
   
   @Input() user?: string = 'idecos';
-  @Input() server?: string = 'localhost';
-  @Input() port?: number = 1337;
+  @Input() host?: string = 'localhost';
   @Input() programs: any = {};
   
   constructor(
@@ -61,7 +60,7 @@ export class TerminalDirective {
   }
 
   private _terminalPrompt() {
-    this.print(`${this.user}@${this.server} $ `);
+    this.print(`${this.user}@${this.host} $ `);
   }
   
   private clearTerminal(wait: boolean = true) {

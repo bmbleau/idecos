@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild, Output } from '@angular/core';
 import { PluginComponent } from '../plugin/plugin.component';
 import { Store } from '@ngrx/store';
 import { TerminalDirective } from './terminal.directive';
@@ -14,9 +14,21 @@ export class TerminalComponent implements PluginComponent {
   @Input() metadata: any;
   @Input() standalone: boolean = true;
   @ViewChild(TerminalDirective) terminal;
+
   private command = [];
-  
   private _programs = TerminalPrograms;
+
+  @Output() public get programs() {
+    return  Object.keys(this._programs)
+                  .filter(program => !program.includes('_help'))
+                  .map(name => {
+                    return {
+                      name,
+                      script: this._programs[name],
+                      help: this._programs[`${name}_help`],
+                    };
+                  });
+  };
   
   constructor(
     private store$: Store<any>,
@@ -32,7 +44,7 @@ export class TerminalComponent implements PluginComponent {
     });
   };
   
-  private getProgram(command, args) {
+  private getProgram([command, args]) {
     const program = this.programs.find((program: any, index: number, programs: any[]) => {
       return program.name === command;
     });
@@ -72,7 +84,7 @@ export class TerminalComponent implements PluginComponent {
         this.terminal.newLine();
         
         // find and execute the program.
-        this.getProgram(command, commandArgs)
+        this.getProgram([command, commandArgs])
             .then(this.callProgram.bind(this))
             .catch(this.printError.bind(this))
             .then(this.printSuccess.bind(this));
@@ -88,20 +100,8 @@ export class TerminalComponent implements PluginComponent {
     this.terminal.print(key);
     this.command.push(key);
   }
-  
-  @Input() get programs() {
-    return  Object.keys(this._programs)
-                  .filter(program => !program.includes('_help'))
-                  .map(name => {
-                    return {
-                      name,
-                      script: this._programs[name],
-                      help: this._programs[`${name}_help`],
-                    };
-                  });
-  }
 
-  get state() {
+  private get state() {
     let state = null;
     this.store$.take(1).subscribe(_state => state = _state);
     return state;
