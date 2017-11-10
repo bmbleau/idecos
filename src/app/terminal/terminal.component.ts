@@ -2,7 +2,7 @@ import { Component, Input, ViewChild } from '@angular/core';
 import { PluginComponent } from '../plugin/plugin.component';
 import { Store } from '@ngrx/store';
 import { TerminalDirective } from './terminal.directive';
-import { echo, dispatch, help, ls, app } from './programs';
+import * as TerminalPrograms from './programs';
 import { Subscription } from 'rxjs/Rx';
 
 @Component({
@@ -16,27 +16,13 @@ export class TerminalComponent implements PluginComponent {
   @ViewChild(TerminalDirective) terminal;
   private command = [];
   
-  private _programs = {
-    echo,
-    ls,
-    dispatch,
-    help,
-    app,
-    clear: (terminal, args) => {
-      this.terminal.clear();
-      return null;
-    },
-  };
+  private _programs = TerminalPrograms;
   
   constructor(
     private store$: Store<any>,
   ) { }
   
   public ngOnInit() {
-    this.terminal.writeln('With great power comes great responsability. This terminal,');
-    this.terminal.writeln('while not bash, grants you access to the ide\'s underlying');
-    this.terminal.writeln('systems. Use it with caution! For help type `help`.');
-    this.terminal.newLine();
     this.terminal.terminalPrompt();
     this.terminal.on('keypress', this.onKeypress.bind(this));
     this.terminal.on('key', this.onLineFeed.bind(this));
@@ -44,6 +30,37 @@ export class TerminalComponent implements PluginComponent {
       event.preventDefault();
       return false;
     });
+  };
+  
+  private getProgram(command, args) {
+    const program = this.programs.find((program: any, index: number, programs: any[]) => {
+      return program.name === command;
+    });
+    
+    if (program) return Promise.resolve([program, command, args]);
+    const conditionalError = Array.isArray(args) && args.length ? `with args ${args}` : '';
+    return Promise.reject([`Unable to execute command ${command} ${conditionalError}`, command, args]);
+  };
+  
+  private callProgram([program, command, args]) {
+    const response = program.script.call(this, this.terminal, args);
+    return [response, command, args];
+  };
+  
+  private printError([error, command, args]) {
+    this.terminal.write(`${error}`);
+    this.terminal.terminalPrompt();
+    return Promise.reject(error);
+  }
+  
+  private printSuccess([response, command, args]) {
+    if (Array.isArray(response)) {
+      response.forEach(this.terminal.writeln.bind(this));
+    } else if (response !== null) {
+      this.terminal.writeln(response.toString());
+    }
+  
+    this.terminal.terminalPrompt();
   }
   
   private onLineFeed(key, event) {
@@ -55,27 +72,10 @@ export class TerminalComponent implements PluginComponent {
         this.terminal.newLine();
         
         // find and execute the program.
-        new Promise((resolve, reject) => {
-          const program = this.programs.find((program: any, index: number, programs: any[]) => {
-            return program.name === command;
-          });
-          
-          if (program) resolve(program);
-          reject(`Unable to execute command ${command} with args ${commandArgs}`);
-        }).then((program: any) => {
-          return program.script.call(this, this.terminal, commandArgs);
-        }).catch(err => {
-          this.terminal.write(`${err}`);
-          this.terminal.terminalPrompt();
-        }).then((response) => {
-          if (Array.isArray(response)) {
-            response.forEach(this.terminal.writeln.bind(this));
-          } else if (response === null) {
-          } else {
-            this.terminal.writeln(response.toString());
-          }
-          this.terminal.terminalPrompt();
-        });
+        this.getProgram(command, commandArgs)
+            .then(this.callProgram.bind(this))
+            .catch(this.printError.bind(this))
+            .then(this.printSuccess.bind(this));
         break;
       }
       case 'Backspace': {
@@ -90,12 +90,15 @@ export class TerminalComponent implements PluginComponent {
   }
   
   @Input() get programs() {
-    return Object.keys(this._programs).map(name => {
-      return {
-        name,
-        script: this._programs[name],
-      };
-    });
+    return  Object.keys(this._programs)
+                  .filter(program => !program.includes('_help'))
+                  .map(name => {
+                    return {
+                      name,
+                      script: this._programs[name],
+                      help: this._programs[`${name}_help`],
+                    };
+                  });
   }
 
   get state() {
