@@ -16,8 +16,9 @@ export class DirectoryComponent {
   @Input() hidden: boolean = true;
   @Input() root: boolean = false;
   
-  private newFileModalId;
-  
+  private newFileModalId: number;
+  private newFolderModalId: number;
+
   constructor(
     private ModalService: ModalService,
     private store$: Store<EditorState>,
@@ -25,10 +26,9 @@ export class DirectoryComponent {
   
   public ngOnInit() {
     if (this.entry && this.entry.fullPath) {
-      this.newFileModalId = this.ModalService.register({
-        value: this.entry.fullPath,
-        component: NewEntryComponent,
-      });
+      const modalShell = { root: this.entry, value: this.entry.fullPath, component: NewEntryComponent };
+      this.newFileModalId = this.ModalService.register(Object.assign({ type: 'file' }, modalShell));
+      this.newFolderModalId = this.ModalService.register(Object.assign({ type: 'folder' }, modalShell));
     }
   }
   
@@ -67,24 +67,24 @@ export class DirectoryComponent {
       contextMenu.push({ hr: true });
       if (!this.root) {
         contextMenu.push({ label: 'Remove Folder' });
-        contextMenu.push({ hr: true });
-        contextMenu.push({ label: 'Move Folder' });
-        contextMenu.push({ label: 'Rename Folder' });
+        // contextMenu.push({ hr: true });
+        // contextMenu.push({ label: 'Move Folder' });
+        // contextMenu.push({ label: 'Rename Folder' });
         contextMenu.push({ hr: true });
       } else {
         contextMenu.push({ label: 'Close Project', onclick: this.closeProject.bind(this) });
         contextMenu.push({ label: 'Open New Project', onclick: this.openProject.bind(this) });
         contextMenu.push({ hr: true });
       }
-      contextMenu.push({ label: 'New Folder' });
+      contextMenu.push({ label: 'New Folder', onclick: this.newFolderHandler.bind(this) });
       contextMenu.push({ label: 'New File', onclick: this.newFileHandler.bind(this) });
     } else {
       contextMenu.push({ label: 'Open File', onclick: this.action.bind(this) });
       contextMenu.push({ hr: true });
       contextMenu.push({ label: 'Remove File' });
-      contextMenu.push({ hr: true });
-      contextMenu.push({ label: 'Move File' });
-      contextMenu.push({ label: 'Rename File' });
+      // contextMenu.push({ hr: true });
+      // contextMenu.push({ label: 'Move File' });
+      // contextMenu.push({ label: 'Rename File' });
     }
     
     return contextMenu;
@@ -92,6 +92,10 @@ export class DirectoryComponent {
   
   public newFileHandler() {
     this.ModalService.activateModal(this.newFileModalId);
+  }
+  
+  public newFolderHandler() {
+    this.ModalService.activateModal(this.newFolderModalId);
   }
   
   public action() {
@@ -102,7 +106,7 @@ export class DirectoryComponent {
       });
     } else {
       this.hidden = !this.hidden;
-      if (!this.hidden && !this.entry.contents.length) {
+      if (!this.hidden) {
         this.openDirectory(this.entry);
       }
     }

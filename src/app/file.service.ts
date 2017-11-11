@@ -60,7 +60,7 @@ export class FileService {
     return Promise.all(entries.map(entry => {
       if (entry.isDirectory) entry.contents = [];
       return Promise.resolve(entry);
-    }))
+    }));
   }
   
   private _processDirectory(entries) {

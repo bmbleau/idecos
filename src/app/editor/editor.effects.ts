@@ -179,16 +179,16 @@ export class EditorEffects {
   private newFile$ = this.actions$
     .ofType('editor:file:create')
     .switchMap((action, index) => {
-      const [directory, name] = action.payload;
+      const { directory, name } = action.payload;
       const createFilePromise = this.FileService.newFile(directory, name);
       return Observable.fromPromise(createFilePromise.then(() => {
-        return directory
+        return directory;
       }));
     })
-    .switchMap((action, index) => {
+    .switchMap((directory, index) => {
       return Observable.of({
         type: 'editor:open:directory',
-        payload: action.payload,
+        payload: directory,
       });
     });
 

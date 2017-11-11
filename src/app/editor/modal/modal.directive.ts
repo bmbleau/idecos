@@ -106,7 +106,8 @@ export class ModalDirective {
       }
     });
 
-    (<ModalComponent>componentRef.instance).metadata = modal.metadata;
+    (componentRef.instance as ModalComponent).metadata = modal.metadata;
+    (componentRef.instance as ModalComponent).close = this.hide.bind(this);
   }
   
   get element() {
