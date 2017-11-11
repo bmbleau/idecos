@@ -2,6 +2,8 @@ import { Component, Input, ViewEncapsulation } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { EditorState } from '../editor.state';
 import * as md5 from 'md5';
+import { NewEntryComponent } from '../newEntry/newEntry.component';
+import { ModalService } from '../modal/modal.service';
 
 @Component({
   selector: 'directory',
@@ -14,9 +16,21 @@ export class DirectoryComponent {
   @Input() hidden: boolean = true;
   @Input() root: boolean = false;
   
+  private newFileModalId;
+  
   constructor(
+    private ModalService: ModalService,
     private store$: Store<EditorState>,
   ) { }
+  
+  public ngOnInit() {
+    if (this.entry && this.entry.fullPath) {
+      this.newFileModalId = this.ModalService.register({
+        value: this.entry.fullPath,
+        component: NewEntryComponent,
+      });
+    }
+  }
   
   get hasChanged() {
     if (this.entry.isFile) {
@@ -63,7 +77,7 @@ export class DirectoryComponent {
         contextMenu.push({ hr: true });
       }
       contextMenu.push({ label: 'New Folder' });
-      contextMenu.push({ label: 'New File' });
+      contextMenu.push({ label: 'New File', onclick: this.newFileHandler.bind(this) });
     } else {
       contextMenu.push({ label: 'Open File', onclick: this.action.bind(this) });
       contextMenu.push({ hr: true });
@@ -74,6 +88,10 @@ export class DirectoryComponent {
     }
     
     return contextMenu;
+  }
+  
+  public newFileHandler() {
+    this.ModalService.activateModal(this.newFileModalId);
   }
   
   public action() {

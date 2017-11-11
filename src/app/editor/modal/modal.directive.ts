@@ -84,8 +84,6 @@ export class ModalDirective {
   private loadModal(modal) {
     if (!modal) return;
     
-    console.log(this.viewContainerRef);
-
     modal = new Modal(
       modal.component,
       modal
@@ -102,6 +100,12 @@ export class ModalDirective {
     let componentRef = this.viewContainerRef.createComponent(componentFactory);
     
     // Attach the metadata to the plugin component.
+    Object.keys(componentRef.instance).forEach(inputName => {
+      if (modal.hasOwnProperty(inputName)) {
+        componentRef.instance[inputName] = modal[inputName];
+      }
+    });
+
     (<ModalComponent>componentRef.instance).metadata = modal.metadata;
   }
   

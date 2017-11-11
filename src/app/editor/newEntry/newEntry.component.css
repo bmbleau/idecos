@@ -1,0 +1,16 @@
+.new-entry-container {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 50px;
+  width: 300px;
+  margin: 0 auto;
+  height: 40px;
+  padding: 10px;
+  background-color: #073642;
+  color: #ffffff;
+  font-weight: bold;
+  z-index: 2;
+  border-radius: 5px;
+  border: 0px;
+}
