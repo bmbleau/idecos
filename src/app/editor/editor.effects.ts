@@ -191,6 +191,25 @@ export class EditorEffects {
         payload: directory,
       });
     });
+    
+  @Effect({
+    dispatch: true,
+  })
+  private removeFile$ = this.actions$
+    .ofType('editor:file:remove')
+    .switchMap((action, index) => {
+      const { root, entry } = action.payload;
+      const removeFilePromise = this.FileService.removeFile(entry);
+      return Observable.fromPromise(removeFilePromise.then(() => {
+        return root;
+      }))
+    })
+    .switchMap((directory, index) => {
+      return Observable.of({
+        type: 'editor:open:directory',
+        payload: directory,
+      });
+    });
 
   @Effect({
     dispatch: true,

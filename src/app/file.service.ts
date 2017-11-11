@@ -186,6 +186,12 @@ export class FileService {
     });
   }
   
+  public removeFile(entry) {
+    return new Promise((resolve, reject) => {
+      entry.remove(resolve.bind(this), reject.bind(this));
+    });
+  }
+  
   public createDirectory(directory, name) {
     return new Promise((resolve, reject) => {
       directory.getDirectory(name, { create: true }, resolve.bind(this));

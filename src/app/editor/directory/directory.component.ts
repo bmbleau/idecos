@@ -14,10 +14,11 @@ import { ModalService } from '../modal/modal.service';
 export class DirectoryComponent {
   @Input() entry;
   @Input() hidden: boolean = true;
-  @Input() root: boolean = false;
+  @Input() root;
   
   private newFileModalId: number;
   private newFolderModalId: number;
+  private removeEntryModalId: number;
 
   constructor(
     private ModalService: ModalService,
@@ -65,11 +66,8 @@ export class DirectoryComponent {
     if (!this.entry.isFile) {
       contextMenu.push({ label: 'Toggle Folder', onclick: this.action.bind(this) });
       contextMenu.push({ hr: true });
-      if (!this.root) {
-        contextMenu.push({ label: 'Remove Folder' });
-        // contextMenu.push({ hr: true });
-        // contextMenu.push({ label: 'Move Folder' });
-        // contextMenu.push({ label: 'Rename Folder' });
+      if (this.root !== this.entry) {
+        contextMenu.push({ label: 'Remove Folder', onclick: this.removeEntryHandler.bind(this) });
         contextMenu.push({ hr: true });
       } else {
         contextMenu.push({ label: 'Close Project', onclick: this.closeProject.bind(this) });
@@ -81,10 +79,7 @@ export class DirectoryComponent {
     } else {
       contextMenu.push({ label: 'Open File', onclick: this.action.bind(this) });
       contextMenu.push({ hr: true });
-      contextMenu.push({ label: 'Remove File' });
-      // contextMenu.push({ hr: true });
-      // contextMenu.push({ label: 'Move File' });
-      // contextMenu.push({ label: 'Rename File' });
+      contextMenu.push({ label: 'Remove File', onclick: this.removeEntryHandler.bind(this) });
     }
     
     return contextMenu;
@@ -96,6 +91,16 @@ export class DirectoryComponent {
   
   public newFolderHandler() {
     this.ModalService.activateModal(this.newFolderModalId);
+  }
+  
+  public removeEntryHandler() {
+    this.store$.dispatch({
+      type: 'editor:file:remove',
+      payload: {
+        root: this.root,
+        entry: this.entry,
+      },
+    });
   }
   
   public action() {

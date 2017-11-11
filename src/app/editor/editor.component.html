@@ -3,7 +3,7 @@
 <div class="plugin-container">
   <nav class="directory" [context-menu]="directoryContextMenu">
     <directory [hidden]="false"
-               [root]="true"
+               [root]="(editor$ | async).directory"
                [entry]="(editor$ | async).directory">
     </directory>
   </nav>

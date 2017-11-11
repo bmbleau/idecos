@@ -13,6 +13,7 @@
   </li>
   <span *ngIf="!hidden && entry.isDirectory">
     <directory *ngFor="let child of entry.contents"
+               [root]="entry"
                [entry]="child">
     </directory>
   </span>
