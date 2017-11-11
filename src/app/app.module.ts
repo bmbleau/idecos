@@ -19,6 +19,9 @@ import { FileService } from './file.service';
 import { IdentityService } from './identity.service';
 import { StorageService } from './storage.service';
 
+import { ModalService } from './editor/modal/modal.service';
+import { ModalDirective } from './editor/modal/modal.directive';
+
 // reducers
 import { editorReducer } from './editor/editor.reducer';
 import { EditorEffects } from './editor/editor.effects';
@@ -36,6 +39,7 @@ import { TipsComponent } from './tips/tips.component';
     AppComponent,
     ContextMenuDirective,
     PluginDirective,
+    ModalDirective,
     EditorComponent,
     MonacoEditorDirective,
     LoadingComponent,
@@ -60,6 +64,7 @@ import { TipsComponent } from './tips/tips.component';
   ],
   providers: [
     PluginService,
+    ModalService,
     WindowService,
     FileService,
     IdentityService,

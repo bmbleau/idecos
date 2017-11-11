@@ -6,7 +6,10 @@ import { Store } from '@ngrx/store';
 import { WindowService } from '../window.service';
 import { FeatureService } from './feature/feature.service';
 import { EditorState } from './editor.state';
+import { ModalService } from './modal/modal.service';
 import * as md5 from 'md5';
+
+import { LoadingComponent } from '../loading/loading.component';
 
 @Component({
   selector: 'editor',
@@ -21,6 +24,7 @@ export class EditorComponent implements PluginComponent {
   
   constructor(
     public FileService: FileService,
+    private modalService: ModalService,
     private FeatureService: FeatureService,
     private window: WindowService,
     private store$: Store<EditorState>,

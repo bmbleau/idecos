@@ -6,3 +6,5 @@ export * from './touch.program';
 export * from './clear.program';
 export * from './cd.program';
 export * from './npm.program';
+export * from './sh.program';
+export * from './git.program';
