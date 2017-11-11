@@ -7,14 +7,14 @@ main {
 nav {
   display: flex;
   flex: 1;
-  background-color: #073642;
+  background-color: #1E1E1E;
   justify-content: center;
   border-right: 1px solid black;
+  padding: 5px;
 }
 
 nav ul {
   list-style: none;
-  margin: 5px;
   margin-bottom: 0px;
   margin-top: 0px;
   padding: 0px;
@@ -27,8 +27,8 @@ nav ul::-webkit-scrollbar {
 }
 
 nav ul li {
-  background-color: #002B36;
-  color: #657B83;
+  background-color: #303030;
+  color: #ADAFB5;
   padding: 15px;
   height: 20px;
   width: 20px;
@@ -38,18 +38,18 @@ nav ul li {
   text-align: center;
   line-height: 20px;
   font-size: 22px;
-  border: 2px solid #657B83;
+  border: 2px solid #ADAFB5;
   cursor: pointer;
 }
 
 nav ul li:hover {
-  border-color: #268BD2;
-  color: #268BD2;
+  border-color: #406E95;
+  color: #406E95;
 }
 
 nav ul li.active {
-  border-color: #268BD2;
-  color: #268BD2;
+  border-color: #406E95;
+  color: #406E95;
 }
 
 nav ul li:nth-last-child(2) {

@@ -1,5 +1,4 @@
-<!-- (contextmenu)="disableEvent($event)" -->
-<main>
+<main (contextmenu)="disableEvent($event)">
   <nav>
     <ul>
       <li *ngFor="let plugin of pluginService.plugins; let i = index;"

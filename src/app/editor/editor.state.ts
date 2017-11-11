@@ -23,9 +23,9 @@ export type EditorOptions = {
 };
 export type EditorTheme = {
   base: 'vs' | 'vs-dark';
-  inherit: boolean;
-  rules: { [name: string ]: string}[];
-  colors: { [name: string]: string };
+  inherit?: boolean;
+  rules?: { [name: string ]: string}[];
+  colors?: { [name: string]: string };
 }
 
 export class EditorState {
@@ -51,22 +51,10 @@ export class EditorState {
     }
   };
   public theme: EditorTheme = {
-      base: 'vs',
+      base: 'vs-dark',
       inherit: true,
-      rules: [
-        { background: 'EDF9FA' },
-        { token: 'comment', foreground: '244b56', fontStyle: 'italic' }
-      ],
-      colors: {
-          'editor.foreground': '#000000',
-          'focusBorder': '#657B83',
-          'editor.background': '#657B83',
-          'editorCursor.foreground': '#8B0000',
-          'editor.lineHighlightBackground': '#0000FF20',
-          'editorLineNumber.foreground': '#073642',
-          'editor.selectionBackground': '#88000030',
-          'editor.inactiveSelectionBackground': '#88000015'
-      }
+      rules: [],
+      colors: {}
   };
 
   public tabs: any[] = [];

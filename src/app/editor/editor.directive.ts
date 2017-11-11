@@ -210,6 +210,7 @@ export class MonacoEditorDirective {
   get settings() {
     return Object.assign({
       model: this.registerModels.call(this, this.file),
+      theme: 'vs-dark',
     }, this.options);
   }
   

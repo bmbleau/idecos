@@ -26,9 +26,9 @@
 nav.directory {
   display: flex;
   /*flex: 5;*/
-  background-color: #002B36;
+  background-color: #181A21;
   border-right: 1px solid black;
-  color: #FDF6E3;
+  color: #DADADA;
   padding: 10px;
   overflow: auto;
   width: 200px;
@@ -57,8 +57,8 @@ section {
 
 section nav {
   display: flex;
-  background-color: #073642;
-  color: #8FB09C;
+  background-color: #333333;
+  color: #DADADA;
   height: 40px;
   border-bottom: 1px solid black;
 }
@@ -81,28 +81,28 @@ section nav ul li {
   line-height: 40px;
   font-weight: bold;
   overflow: hidden;
-  color: #FDF6E3;
-  background-color: #073642;
+  color: #eee;
+  background-color: #333333;
   margin-bottom: -1px;
 }
 
 section nav ul .active {
-  background-color: #657B83;
-  color: #073642;
+  background-color: #1E1E1E;
+  color: #F1F1EC;
 }
 
 section article {
   flex: 13;
-  background-color: #657B83;
+  background-color: #1E1E1E;
 }
 
 section .empty {
   flex: 13;
-  background-color: #657B83;
+  background-color: #1E1E1E;
   display: flex;
   flex-direction: column;
   height: 100vh;
-  color: #002B36;
+  color: #406E95;
 }
 
 section .empty .row {
@@ -130,7 +130,7 @@ section footer {
   flex: 1;
   display: flex;
   justify-content: center;
-  background-color: #073642;
+  background-color: #333333;
   border-top: 1px solid black;
   max-height: 25px;
   position: relative;
@@ -168,7 +168,7 @@ footer main.terminal {
 
 section footer i {
   line-height: 25px;
-  color: #002B36;
+  color: #DADADA;
   font-size: 14px;
 }
 
@@ -179,12 +179,12 @@ section footer.terminal-active i {
 }
 
 section footer:hover i.action {
-  color: #657B83;
+  color: #DADADA;
   font-size: 18px;
 }
 
 section footer span.pull-right {
-  color: #657B83;
+  color: #DADADA;
   position: absolute;
   font-size: 12px;
   right: 10px;
@@ -196,7 +196,7 @@ section footer span.pull-right i {
 }
 
 section footer span.pull-left {
-  color: #657B83;
+  color: #DADADA;
   position: absolute;
   font-size: 12px;
   left: 10px;
