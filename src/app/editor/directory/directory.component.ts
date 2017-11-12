@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { EditorState } from '../editor.state';
 import * as md5 from 'md5';
 import { NewEntryComponent } from '../newEntry/newEntry.component';
+import { ConfirmComponent } from '../confirmation/confirm.component';
 import { ModalService } from '../modal/modal.service';
 
 @Component({
@@ -27,9 +28,33 @@ export class DirectoryComponent {
   
   public ngOnInit() {
     if (this.entry && this.entry.fullPath) {
-      const modalShell = { root: this.entry, value: this.entry.fullPath, component: NewEntryComponent };
-      this.newFileModalId = this.ModalService.register(Object.assign({ type: 'file' }, modalShell));
-      this.newFolderModalId = this.ModalService.register(Object.assign({ type: 'folder' }, modalShell));
+      const commonModalShell = {
+        root: this.entry,
+        value: this.entry.fullPath
+      };
+
+      const newEntryModalShell = Object.assign(
+        {},
+        commonModalShell,
+        {
+          component: NewEntryComponent,
+        }
+      );
+
+      const removeEntryModalShell = Object.assign(
+        {},
+        commonModalShell,
+        {
+          question: `Are you sure you want to delete "${this.entry.name}"?`,
+          confirm: this._removeEntryHandler.bind(this),
+          component: ConfirmComponent
+        }
+      );
+
+
+      this.newFileModalId = this.ModalService.register(newEntryModalShell);
+      this.newFolderModalId = this.newFileModalId;
+      this.removeEntryModalId = this.ModalService.register(removeEntryModalShell);
     }
   }
   
@@ -84,8 +109,8 @@ export class DirectoryComponent {
   public newFolderHandler() {
     this.ModalService.activateModal(this.newFolderModalId);
   }
-  
-  public removeEntryHandler() {
+
+  private _removeEntryHandler() {
     this.store$.dispatch({
       type: 'editor:file:remove',
       payload: {
@@ -93,6 +118,10 @@ export class DirectoryComponent {
         entry: this.entry,
       },
     });
+  }
+  
+  public removeEntryHandler() {
+    this.ModalService.activateModal(this.removeEntryModalId);
   }
   
   public action() {

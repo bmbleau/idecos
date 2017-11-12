@@ -22,6 +22,7 @@ import { StorageService } from './storage.service';
 import { ModalService } from './editor/modal/modal.service';
 import { ModalDirective } from './editor/modal/modal.directive';
 import { NewEntryComponent } from './editor/newEntry/newEntry.component';
+import { ConfirmComponent } from './editor/confirmation/confirm.component';
 
 // reducers
 import { editorReducer } from './editor/editor.reducer';
@@ -50,6 +51,7 @@ import { TipsComponent } from './tips/tips.component';
     TerminalDirective,
     SettingsComponent,
     NewEntryComponent,
+    ConfirmComponent,
   ],
   entryComponents: [
     EditorComponent,
@@ -58,6 +60,7 @@ import { TipsComponent } from './tips/tips.component';
     TipsComponent,
     SettingsComponent,
     NewEntryComponent,
+    ConfirmComponent,
   ],
   imports: [
     BrowserModule,
