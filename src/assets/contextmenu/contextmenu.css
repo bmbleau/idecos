@@ -78,7 +78,7 @@ body > cmenu {
 .win7 cmenu menuitem {
     padding: 0px 5px 0px 32px;
     height: 20px;
-    border-radius: 3px;
+    /* border-radius: 3px; */
     border: 1px solid transparent;
 }
 .win7 cmenu menuitem:hover{
@@ -124,7 +124,7 @@ body > cmenu {
     border-left: 1px solid rgba(0,0,0, 0.231372549);
     border-right: 1px solid rgba(0,0,0, 0.231372549);
     border-bottom: 1px solid rgba(0,0,0, 0.4117647059);
-    border-radius: 5px;
+    /* border-radius: 5px; */
     padding: 4px 0;
     -webkit-box-shadow: 0px 12px 10px rgba(0,0,0,0.2);
     -moz-box-shadow: 0px 12px 10px rgba(0,0,0,0.2);

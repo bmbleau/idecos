@@ -6,4 +6,5 @@ ul {
 
 ul li {
   cursor: pointer;
+  font-size: 13px;
 }
