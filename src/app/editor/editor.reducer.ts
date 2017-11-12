@@ -40,13 +40,18 @@ export function editorReducer(state: EditorState = new EditorState(), action: Ac
 	  case EDITOR_TAB_ADD: {
 	    const tabs = state.tabs.slice(0);
 	    
-	    if (action.payload) {
-	      if (!tabs.includes(action.payload)) tabs.push(action.payload);
+			if (action.payload) {
+				if (!tabs.includes(action.payload)) tabs.push(action.payload);
 
-  	    return Object.assign(new EditorState(), state, {
-  	      tabs
-  	    });
-	    }
+				let selectedTab = tabs.findIndex(tab => tab === action.payload);
+				selectedTab = selectedTab === -1 ? state.selectedTab : selectedTab;
+
+
+				return Object.assign(new EditorState(), state, {
+					tabs,
+					selectedTab,
+				});
+			}
 	    
 	    return state;
 	  }
