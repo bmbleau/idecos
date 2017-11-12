@@ -91,6 +91,10 @@ section nav ul .active {
   color: #F1F1EC;
 }
 
+section nav ul li .close {
+  margin-left: 6px;
+}
+
 section article {
   flex: 13;
   background-color: #1E1E1E;

@@ -14,7 +14,11 @@
             [ngClass]="{'active': i === (editor$ | async).selectedTab}"
             (click)="$event.which == 2 ? removeTab(i) : selectTab(i)"
             [context-menu]="createTabContextMenu(i, tab)">
-          {{ getTabName(tab) }}
+          <span>{{ getTabName(tab) }}</span>
+          <i class="close fa fa-times-circle" 
+             aria-hidden="true"
+             (click)="removeTab(i)"
+             *ngIf="i === (editor$ | async).selectedTab"></i>
         </li>
       </ul>
     </nav>
