@@ -16,10 +16,10 @@
   "orientation": "landscape",
   "display": "standalone",
   "icons": {
-    "256": "assets/icons/web_hi_res_512.png",
-    "128": "assets/icons/web_hi_res_512.png",
-    "64": "assets/icons/web_hi_res_512.png",
-    "16": "assets/icons/web_hi_res_512.png"
+    "256": "assets/icons/idecos_256_icon.png",
+    "128": "assets/icons/idecos_128_icon.png",
+    "64": "assets/icons/idecos_64_icon.png",
+    "16": "assets/icons/idecos_64_icon.png"
   },
   
   "offline_enabled": true,
