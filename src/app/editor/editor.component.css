@@ -25,13 +25,13 @@
 
 nav.directory {
   display: flex;
-  /*flex: 5;*/
   background-color: #394046;
   border-right: 1px solid black;
   color: #DADADA;
   padding: 10px;
   overflow: auto;
   width: 200px;
+  font-size: 13px;
 }
 
 nav.directory ul {

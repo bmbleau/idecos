@@ -69,9 +69,9 @@ export class MonacoEditorDirective {
   }
   
   private digest() {
-    this.changeDetector.detach()
+    this.changeDetector.detach();
     this.changeDetector.detectChanges();
-    this.changeDetector.reattach()
+    this.changeDetector.reattach();
   }
   
   private initMonaco() {
