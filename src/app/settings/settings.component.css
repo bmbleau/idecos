@@ -6,14 +6,11 @@
 }
 
 nav {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
   background-color: #394046;
   border-right: 1px solid black;
   color: #DADADA;
   overflow: auto;
-  width: 220px;
+  width: 306px;
 }
 
 nav ul li {
@@ -29,4 +26,16 @@ nav ul li {
 
 nav ul .active, nav ul li:hover {
   background-color: #303030;
+}
+
+.contents {
+  width: 100%;
+  padding: 20px;
+}
+
+.contents .card {
+  background-color: #adafb5;
+  padding: 10px;
+  border-radius: 4px;
+  color: #303030;
 }

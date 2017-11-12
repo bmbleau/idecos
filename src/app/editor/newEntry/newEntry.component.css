@@ -7,10 +7,14 @@
   margin: 0 auto;
   height: 40px;
   padding: 10px;
-  background-color: #073642;
-  color: #ffffff;
+  background-color: #303030;
+  color: #ADAFB5;
   font-weight: bold;
   z-index: 2;
   border-radius: 5px;
   border: 0px;
+}
+
+.new-entry-container:focus {
+  outline: 1px solid #394046;
 }

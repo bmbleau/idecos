@@ -36,7 +36,6 @@ export class NewEntryComponent implements ModalComponent {
   private keyHandler(event) {
     switch(event.key) {
       case 'Enter': {
-        console.log(this.inputValue, this);
         this.store$.dispatch({
           type: 'editor:file:create',
           payload: {
@@ -45,8 +44,11 @@ export class NewEntryComponent implements ModalComponent {
           }
         });
         this.close();
-        // Dispatch event to create the file or folder.
-        // close the modal is it is no longer needed.
+        break;
+      }
+      case 'Escape': {
+        this.close();
+        break;
       }
     }
   }
