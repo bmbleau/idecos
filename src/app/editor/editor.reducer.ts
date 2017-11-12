@@ -41,7 +41,7 @@ export function editorReducer(state: EditorState = new EditorState(), action: Ac
 	    const tabs = state.tabs.slice(0);
 	    
 	    if (action.payload) {
-	      tabs.push(action.payload);
+	      if (!tabs.includes(action.payload)) tabs.push(action.payload);
 
   	    return Object.assign(new EditorState(), state, {
   	      tabs

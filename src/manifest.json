@@ -2,7 +2,7 @@
   "name": "IDECOS",
   "short_name": "IDECOS",
   "description": "An integrated development enviroment for ChromeOS",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "manifest_version": 2,
   
   "app": {

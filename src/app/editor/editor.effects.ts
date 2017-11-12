@@ -88,7 +88,7 @@ export class EditorEffects {
   private initProject$ = this.actions$
     .ofType('@ngrx/store/init')
     .switchMap(() => {
-      const projectPromise = this.openDirectory();
+      const projectPromise = this.openProject();
       return Observable.fromPromise(projectPromise)
         .map(directory => {
           return {
@@ -168,8 +168,8 @@ export class EditorEffects {
   private saveTab$ = this.actions$
     .ofType('editor:tab:save')
     .switchMap((action, index) => {
-      const tab = action.payload;
-      const savePromise = this.FileService.saveFile(tab, tab.contents);
+      const { tab, contents } = action.payload;
+      const savePromise = this.FileService.saveFile(tab, contents);
       return Observable.fromPromise(savePromise);
     });
     

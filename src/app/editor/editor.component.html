@@ -24,6 +24,7 @@
              [options]="(editor$ | async).options"
              [theme]="(editor$ | async).theme"
              [saveFileHandler]="saveHandler"
+             (models)="updateModels($event)"
              (update)="updateTabContents($event)"
              (position)="updatePosition($event)"
              *ngIf="!(editor$ | async).hidden">

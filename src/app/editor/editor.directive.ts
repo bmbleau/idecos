@@ -9,6 +9,7 @@ import {
 } from "@angular/core";
 import { WindowService } from '../window.service';
 import { EditorLanguageMap } from './language.map';
+import { FileService } from '../file.service';
 
 @Directive({
   selector: "[monacoEditor]",
@@ -25,6 +26,7 @@ export class MonacoEditorDirective {
   @Input() theme;
   @Input() saveFileHandler;
   
+  @Output('models') public exportModels: EventEmitter<any[]> = new EventEmitter();
   @Output() public update: EventEmitter<string> = new EventEmitter();
   @Output() public position: EventEmitter<{
     column: number,
@@ -32,6 +34,7 @@ export class MonacoEditorDirective {
   }> = new EventEmitter();
 
   constructor(
+    private FileService: FileService,
     private _element: ElementRef,
     private changeDetector: ChangeDetectorRef,
   ) { }
@@ -82,8 +85,16 @@ export class MonacoEditorDirective {
       module: this.monaco.languages.typescript.ModuleKind.CommonJS,
     });
 
-    this.registerModels(this.directory);
     this.editor = this.monaco.editor.create(this.element, this.settings);
+    this.registerModels(this.directory)
+      .then(() => {
+        const model = this.findModel(this.file.fullPath);
+        if (model) {
+          this.editor.setModel(model);
+        }
+        
+        this.exportModels.next(this.models);
+      });
     if (this.theme) this.registerTheme('custom', this.theme);
 
     this.editor.addCommand([
@@ -108,6 +119,7 @@ export class MonacoEditorDirective {
 
     this.editor
       .onDidChangeModel((_) => {
+        this.exportModels.next(this.models);
         this.position.next({ lineNumber: 0, column: 0 } );
         const model = this.editor.getModel();
         if (model.getValue) {
@@ -128,11 +140,6 @@ export class MonacoEditorDirective {
         });
         this.digest();
       });
-
-    const model = this.findModel(this.file.fullPath);
-    if (model) {
-      this.editor.setModel(model);
-    }
   }
   
   private registerTheme(name, theme) {
@@ -144,22 +151,32 @@ export class MonacoEditorDirective {
   // into the editor's instance.
   private registerModels(entry) {
     if (!entry) return undefined;
+    
     if (entry.isFile) {
-      this.registerModel(entry);
+      return Promise.resolve(this.registerModel(entry));
     } else if (entry.isDirectory) {
-      entry.contents.forEach(this.registerModels.bind(this));
+      return Promise.all(entry.contents.map(this.registerModels.bind(this)));
     }
+  }
+  
+  private getFileExtension(entry) {
+    if (entry.isFile) {
+      const fullPath = entry.fullPath;
+      return fullPath.split('.').pop();
+    }
+
+    return undefined;
   }
 
   // registers a model with the editor, should it already exist we destroy
   // the old modal to recreate it.
-  private registerModel(entry) {
+  private async registerModel(entry) {
     const fullPath = entry.fullPath;
-    
+
     // do not reregister models already within the editor.
     if (this.findModel(fullPath)) return this.findModel(fullPath);
     
-    const contents = entry.contents;
+    const contents = await this.FileService.getContents(entry);
     const extension = entry.name.split('.').pop();
     const language = EditorLanguageMap[extension];
 
@@ -177,7 +194,7 @@ export class MonacoEditorDirective {
         this.monaco.languages.typescript.typescriptDefaults.setCompilerOptions(Object.assign(
           {},
           settings,
-          JSON.parse(item.contents)
+          this.FileService.getContents(item, true)
         ));
       }
     });
@@ -209,7 +226,6 @@ export class MonacoEditorDirective {
   
   get settings() {
     return Object.assign({
-      model: this.registerModels.call(this, this.file),
       theme: 'vs-dark',
     }, this.options);
   }

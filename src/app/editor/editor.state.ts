@@ -65,8 +65,7 @@ export class EditorState {
   }
   
   get code() {
-    return this.tabs[this.selectedTab] &&
-           this.tabs[this.selectedTab].contents;
+    return this.tabs[this.selectedTab];
   }
   
   get language() {

@@ -21,6 +21,16 @@ export class FileService {
       this.window.fileSystem.chooseEntry(options, resolve.bind(this));
     });
   }
+
+  public async getContents(entry, parse: boolean = false) {
+    const content = await this.readFileHandler(entry)
+      .then(this.readFiles.bind(this))
+      .then((contents: string) => {
+        if (parse) return JSON.parse(contents);
+        return contents;
+      });
+    return content;
+  }
   
   public openDirectory() {
     return this.storage.get('directoryKey')
@@ -97,7 +107,6 @@ export class FileService {
           .then(this.readFileHandler)
           .then(this.readFiles)
           .then(file => {
-            entry.contents = file;
             entry.md5 = md5(file);
             return entry;
           });

@@ -33,14 +33,6 @@ export class DirectoryComponent {
     }
   }
   
-  get hasChanged() {
-    if (this.entry.isFile) {
-      return this.entry.md5 !== md5(this.entry.contents);
-    }
-
-    return false;
-  }
-  
   public openDirectory(entry) {
     this.store$.dispatch({
       type: 'editor:open:directory',

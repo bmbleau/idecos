@@ -18,6 +18,8 @@ export class EditorComponent implements PluginComponent {
   public position: string;
   public editor$ = this.store$.select('editor');
   public terminalHidden: boolean = true;
+  private models: any[] = [];
+  private contents: string;
   
   constructor(
     public FileService: FileService,
@@ -57,22 +59,28 @@ export class EditorComponent implements PluginComponent {
   }
   
   public getTabName(tab) {
+    const model = this.models.find(model => model.uri === tab.fullPath);
+    const fileContents = model ? model.getValue() : '';
     const fileName = tab.name.split('/').pop();
-    const filePrefix = tab.md5 !== md5(tab.contents) ? '*' : '';
-    return `${filePrefix}${fileName}`;
+    const filePrefix = tab.md5 !== md5(fileContents) ? '*' : '';
+    return model ? `${filePrefix}${fileName}` : `${fileName}`;
   }
   
   public updateTabContents(contents) {
-    this.store$.dispatch({
-      type: 'editor:tab:update',
-      payload: contents,
-    });
+    this.contents = contents;
+  }
+  
+  public updateModels(models) {
+    this.models = models;
   }
   
   public saveTab(index: number = this.editor.selectedTab) {
     this.store$.dispatch({
       type: "editor:tab:save",
-      payload: this.editor.tabs[index],
+      payload: {
+        tab: this.editor.tabs[index],
+        contents: this.contents,
+      }
     });
   }
 
