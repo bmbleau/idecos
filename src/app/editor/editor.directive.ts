@@ -17,12 +17,20 @@ import { FileService } from '../file.service';
 export class MonacoEditorDirective {
   private allowResizing: boolean = true;
   private value: string;
-  
+  private file;
   public editor;
 
   @Input() options;
   @Input() directory;
-  @Input() file;
+  @Input('file') set _file(file) {
+    this.file = file;
+    if (this.editor && file) {
+      const model = this.findModel(file.fullPath);
+      if (model) {
+        this.editor.setModel(model);
+      }
+    }
+  }
   @Input() theme;
   @Input() saveFileHandler;
   
@@ -55,16 +63,6 @@ export class MonacoEditorDirective {
       document.body.appendChild(loaderScript);
     } else {
       onGotAmdLoader();
-    }
-  }
-  
-  public ngOnChanges(changeObject) {
-    if (this.editor && changeObject.file) {
-      const file = changeObject.file.currentValue;
-      const model = this.findModel(file.fullPath);
-      if (model) {
-        this.editor.setModel(model);
-      }
     }
   }
   

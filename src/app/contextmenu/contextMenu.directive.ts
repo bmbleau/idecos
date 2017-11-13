@@ -16,11 +16,15 @@ export class ContextMenuDirective {
   ) { }
 
   public ngOnInit() {
-    this.window.contextmenu.attach(this.element, this._menu);
+    if (this.element && this._menu) {
+      this.window.contextmenu.attach(this.element, this._menu);
+    }
   }
-  
+
   public ngOnChanges() {
-    this.window.contextmenu.attach(this.element, this._menu);
+    if (this.element && this._menu) {
+      this.window.contextmenu.attach(this.element, this._menu);
+    }
   }
 
   get element() {

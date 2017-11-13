@@ -37,6 +37,7 @@ export class ModalDirective {
   
   public ngOnDestroy() {
     if (this.activeModalSub) this.activeModalSub.unsubscribe();
+    this.hide();
   }
   
   public show() {
@@ -48,6 +49,10 @@ export class ModalDirective {
   public hide() {
     this.viewContainerRef.clear();
     this.removeClass('active');
+
+    // When we close the modal we also want to remove it
+    // from the service (as it is no longer active).
+    this.modalService.activateModal(-1);
   }
   
   private hasClass(className) {
