@@ -17,7 +17,7 @@ nav ul li {
   display: inline-block;
   flex: 1;
   font-size: 16px;
-  width: 180px;
+  width: calc(100% - 40px);
   color: #ADAFB5;
   background-color: #5d5a5a;
   padding: 20px;
