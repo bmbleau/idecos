@@ -37,8 +37,8 @@ export class DirectoryComponent {
         {},
         commonModalShell,
         {
-          type: this.entry.isFile ? 'file' : 'folder',
-          component: NewEntryComponent,
+          type: 'file',
+          component: NewEntryComponent
         }
       );
 
@@ -54,7 +54,7 @@ export class DirectoryComponent {
 
 
       this.newFileModalId = this.ModalService.register(newEntryModalShell);
-      this.newFolderModalId = this.ModalService.register(newEntryModalShell);
+      this.newFolderModalId = this.ModalService.register(Object.assign({}, newEntryModalShell, { type: 'folder' }));
       this.removeEntryModalId = this.ModalService.register(removeEntryModalShell);
     }
   }
