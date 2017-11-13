@@ -37,7 +37,7 @@ export class NewEntryComponent implements ModalComponent {
     switch(event.key) {
       case 'Enter': {
         this.store$.dispatch({
-          type: 'editor:file:create',
+          type: `editor:${this.metadata.type}:create`,
           payload: {
             directory: this.metadata.root,
             name: this.inputValue,
