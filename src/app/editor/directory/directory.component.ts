@@ -26,8 +26,11 @@ export class DirectoryComponent {
     private store$: Store<EditorState>,
   ) { }
   
-  public ngOnInit() {
-    if (this.entry && this.entry.fullPath) {
+  public ngOnChanges() {
+    if (this.entry &&
+        this.entry.fullPath &&
+        !this.newFileModalId &&
+        !this.newFolderModalId) {
       const commonModalShell = {
         root: this.entry,
         value: this.entry.fullPath
@@ -37,7 +40,8 @@ export class DirectoryComponent {
         {},
         commonModalShell,
         {
-          component: NewEntryComponent,
+          type: 'file',
+          component: NewEntryComponent
         }
       );
 
@@ -53,7 +57,7 @@ export class DirectoryComponent {
 
 
       this.newFileModalId = this.ModalService.register(newEntryModalShell);
-      this.newFolderModalId = this.newFileModalId;
+      this.newFolderModalId = this.ModalService.register(Object.assign({}, newEntryModalShell, { type: 'folder' }));
       this.removeEntryModalId = this.ModalService.register(removeEntryModalShell);
     }
   }

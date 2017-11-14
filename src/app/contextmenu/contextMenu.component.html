@@ -1,0 +1,13 @@
+<div class="blur-container">
+  <ul #contextmenu class="context-menu-container">
+    <span *ngFor="let item of menu;">
+    <li tabIndex="0"
+        *ngIf="item.label"
+        role="button"
+        (click)="item.onclick($event)">{{ item.label }}</li>
+    <li *ngIf="item.hr"
+        role="presentation"
+        class="spacer"></li>
+    </span>
+  </ul>
+</div>

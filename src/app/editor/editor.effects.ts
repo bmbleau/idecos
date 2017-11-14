@@ -195,6 +195,25 @@ export class EditorEffects {
   @Effect({
     dispatch: true,
   })
+  private newDirectory$ = this.actions$
+    .ofType('editor:folder:create')
+    .switchMap((action, index) => {
+      const { directory, name } = action.payload;
+      const createfolderPromise = this.FileService.createDirectory(directory, name);
+      return Observable.fromPromise(createfolderPromise.then(() => {
+        return directory;
+      }));
+    })
+    .switchMap((directory, index) => {
+      return Observable.of({
+        type: 'editor:open:directory',
+        payload: directory,
+      });
+    });
+    
+  @Effect({
+    dispatch: true,
+  })
   private removeFile$ = this.actions$
     .ofType('editor:file:remove')
     .switchMap((action, index) => {

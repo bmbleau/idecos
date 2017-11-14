@@ -1,33 +1,52 @@
-import { Directive, ViewContainerRef, ElementRef, Input } from '@angular/core';
-import { WindowService } from '../window.service';
+import {
+  Directive,
+  Input,
+  ElementRef,
+  ViewContainerRef,
+  ComponentFactoryResolver,
+} from '@angular/core';
+import { ContextMenuComponent } from './contextMenu.component';
 
 @Directive({
   selector: '[context-menu]',
+  host:{
+    '(contextmenu)':'contextMenuHandler($event)'
+  }
 })
 export class ContextMenuDirective {
-  private _menu;
-  @Input('context-menu') set menu(menu: any[]) {
-    this._menu = this.window.contextmenu(menu);
-  };
+  @Input('context-menu') menu;
   
+  private eventListenerSub;
+
   constructor(
-    private window: WindowService,
-    private _element: ElementRef
+    private _element: ElementRef,
+    private viewContainerRef: ViewContainerRef,
+    private componentFactoryResolver: ComponentFactoryResolver
   ) { }
-
-  public ngOnInit() {
-    if (this.element && this._menu) {
-      this.window.contextmenu.attach(this.element, this._menu);
-    }
+  
+  public contextMenuHandler(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.loadMenu(event);
   }
-
-  public ngOnChanges() {
-    if (this.element && this._menu) {
-      this.window.contextmenu.attach(this.element, this._menu);
-    }
-  }
-
-  get element() {
+  
+  private get element() {
     return this._element.nativeElement;
+  }
+  
+  private close() {
+    this.viewContainerRef.clear();
+  }
+  
+  private loadMenu(event) {
+    let componentFactory = this.componentFactoryResolver
+      .resolveComponentFactory(ContextMenuComponent);
+
+    this.viewContainerRef.clear();
+
+    let componentRef = this.viewContainerRef.createComponent(componentFactory);
+    componentRef.instance.close = this.close.bind(this);
+    componentRef.instance.menu = this.menu;
+    componentRef.instance.clickEvent = event;
   }
 }
