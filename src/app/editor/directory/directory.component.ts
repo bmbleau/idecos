@@ -26,8 +26,11 @@ export class DirectoryComponent {
     private store$: Store<EditorState>,
   ) { }
   
-  public ngOnInit() {
-    if (this.entry && this.entry.fullPath) {
+  public ngOnChanges() {
+    if (this.entry &&
+        this.entry.fullPath &&
+        !this.newFileModalId &&
+        !this.newFolderModalId) {
       const commonModalShell = {
         root: this.entry,
         value: this.entry.fullPath
