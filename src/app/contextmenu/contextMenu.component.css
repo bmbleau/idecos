@@ -1,0 +1,44 @@
+.blur-container {
+  position: fixed;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+  z-index: 10;
+}
+
+.context-menu-container {
+  width: 225px;
+  box-shadow: 0 2px 8px #000;
+  color: #bbbbbb;
+  background-color: #2d2f31;
+  position: fixed;
+  font-family: Segoe WPC,Segoe UI,\.SFNSDisplay-Light,SFUIText-Light,HelveticaNeue-Light,sans-serif;
+  outline: 0;
+  z-index: 12;
+}
+
+.context-menu-container li {
+  text-decoration: none;
+  padding: .8em 1em;
+  line-height: 1.1em;
+  background: none;
+  font-size: 12px;
+  text-align: left;
+}
+
+.context-menu-container li:hover:not(.spacer) {
+  background-color: #3a3a3a;
+}
+
+.context-menu-container .spacer {
+  display: block;
+  border-bottom: 1px solid #bbb;
+  margin-left: .8em;
+  margin-right: .8em;
+  margin-bottom: .5em;
+  margin-top: -1em;
+  padding: .8em 1em;
+  line-height: 1.1em;
+  background: none;
+}

@@ -23,6 +23,7 @@ import { ModalService } from './editor/modal/modal.service';
 import { ModalDirective } from './editor/modal/modal.directive';
 import { NewEntryComponent } from './editor/newEntry/newEntry.component';
 import { ConfirmComponent } from './editor/confirmation/confirm.component';
+import { ContextMenuComponent } from './contextmenu/contextMenu.component';
 
 // reducers
 import { editorReducer } from './editor/editor.reducer';
@@ -52,6 +53,7 @@ import { TipsComponent } from './tips/tips.component';
     SettingsComponent,
     NewEntryComponent,
     ConfirmComponent,
+    ContextMenuComponent,
   ],
   entryComponents: [
     EditorComponent,
@@ -61,6 +63,7 @@ import { TipsComponent } from './tips/tips.component';
     SettingsComponent,
     NewEntryComponent,
     ConfirmComponent,
+    ContextMenuComponent,
   ],
   imports: [
     BrowserModule,
