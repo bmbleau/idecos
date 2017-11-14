@@ -22,6 +22,7 @@ WARNING: do not load the application mid build as the files get deleted and chro
 ## Contribute
 
 Git Repository: https://github.com/erdmutter92/IDECOS
+
 Trello Board: https://trello.com/b/H6TTJpvM/idecos
 
 ## Lisence & Copyright
