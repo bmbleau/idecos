@@ -67,4 +67,12 @@ export class WindowService {
   get i18n() {
     if (this.isChromeApp) return this.window.chrome.i18n;
   }
+
+  get innerHeight() {
+    return this.window.innerHeight;
+  }
+
+  get innerWidth() {
+    return this.window.innerWidth;
+  }
 }
