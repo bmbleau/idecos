@@ -18,6 +18,7 @@ export class EditorComponent implements PluginComponent {
   public position: string;
   public editor$ = this.store$.select('editor');
   public terminalHidden: boolean = true;
+  public readOnly: boolean = true;
   private models: any[] = [];
   private contents: string;
   
@@ -75,6 +76,9 @@ export class EditorComponent implements PluginComponent {
   }
   
   public saveTab(index: number = this.editor.selectedTab) {
+    // if the editor is marked as read only do not allow
+    // saving of the document.
+    if (this.readOnly) return undefined;
     this.store$.dispatch({
       type: "editor:tab:save",
       payload: {

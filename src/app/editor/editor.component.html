@@ -28,6 +28,7 @@
              [options]="(editor$ | async).options"
              [theme]="(editor$ | async).theme"
              [saveFileHandler]="saveHandler"
+             (readOnly)="readOnly"
              (models)="updateModels($event)"
              (update)="updateTabContents($event)"
              (position)="updatePosition($event)"

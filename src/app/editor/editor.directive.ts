@@ -44,6 +44,7 @@ export class MonacoEditorDirective {
     column: number,
     lineNumber: number,
   }> = new EventEmitter();
+  @Output() readOnly: boolean = true;
 
   constructor(
     private FileService: FileService,
@@ -88,15 +89,15 @@ export class MonacoEditorDirective {
     });
 
     this.editor = this.monaco.editor.create(this.element, this.settings);
+
     this.registerModels(this.directory)
       .then(() => {
-        const model = this.findModel(this.file.fullPath);
-        if (model) {
-          this.editor.setModel(model);
-        }
-        
+        this._file = this.file;
+        this.readOnly = false;
         this.exportModels.next(this.models);
+        this.editor.updateOptions(this.settings);
       });
+
     if (this.theme) this.registerTheme('custom', this.theme);
 
     this.editor.addCommand([
@@ -230,6 +231,7 @@ export class MonacoEditorDirective {
   get settings() {
     return Object.assign({
       theme: 'vs-dark',
+      readOnly: this.readOnly,
     }, this.options);
   }
   
