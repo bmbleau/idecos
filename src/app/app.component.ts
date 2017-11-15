@@ -6,7 +6,6 @@ import { Plugin } from './plugin/plugin';
 
 import { EditorComponent } from './editor/editor.component';
 import { LoadingComponent } from './loading/loading.component';
-import { TipsComponent } from './tips/tips.component';
 import { TerminalComponent } from './terminal/terminal.component';
 import { SettingsComponent } from './settings/settings.component';
 

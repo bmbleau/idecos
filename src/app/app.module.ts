@@ -35,8 +35,6 @@ import { TerminalDirective } from './terminal/terminal.directive';
 
 import { ContextMenuDirective } from './contextmenu/contextMenu.directive';
 
-import { TipsComponent } from './tips/tips.component';
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -47,7 +45,6 @@ import { TipsComponent } from './tips/tips.component';
     MonacoEditorDirective,
     LoadingComponent,
     DirectoryComponent,
-    TipsComponent,
     TerminalComponent,
     TerminalDirective,
     SettingsComponent,
@@ -59,7 +56,6 @@ import { TipsComponent } from './tips/tips.component';
     EditorComponent,
     TerminalComponent,
     LoadingComponent,
-    TipsComponent,
     SettingsComponent,
     NewEntryComponent,
     ConfirmComponent,
