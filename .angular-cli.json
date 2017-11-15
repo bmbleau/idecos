@@ -9,6 +9,8 @@
       "outDir": "dist",
       "assets": [
         "assets",
+        "vendor",
+        "_locales",
         "favicon.ico",
         "manifest.json",
         "chrome-app.js"
