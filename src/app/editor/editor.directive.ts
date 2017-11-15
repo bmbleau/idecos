@@ -28,6 +28,10 @@ export class MonacoEditorDirective {
       const model = this.findModel(file.fullPath);
       if (model) {
         this.editor.setModel(model);
+      } else {
+        this.registerModel(file).then(_model => {
+          this.editor.setModel(_model)
+        });
       }
     }
   }
@@ -169,16 +173,17 @@ export class MonacoEditorDirective {
   // registers a model with the editor, should it already exist we destroy
   // the old modal to recreate it.
   private async registerModel(entry) {
+    if (!entry) return Promise.resolve(null);
     const fullPath = entry.fullPath;
 
     // do not reregister models already within the editor.
-    if (this.findModel(fullPath)) return this.findModel(fullPath);
+    if (this.findModel(fullPath)) return Promise.resolve(this.findModel(fullPath));
     
     const contents = await this.FileService.getContents(entry);
     const extension = entry.name.split('.').pop();
     const language = EditorLanguageMap[extension];
 
-    return this.monaco.editor.createModel(contents, language, fullPath);
+    return Promise.resolve(this.monaco.editor.createModel(contents, language, fullPath));
   }
   
   private findModel(uri) {
