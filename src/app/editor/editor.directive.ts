@@ -49,7 +49,7 @@ export class MonacoEditorDirective {
   
   public ngAfterViewInit() {
     const onGotAmdLoader = () => {
-      (window as any).require.config({ paths: { 'vs': 'assets/monaco/vs' } });
+      (window as any).require.config({ paths: { 'vs': 'vendor/monaco/vs' } });
       (window as any).require(['vs/editor/editor.main'], () => {
         this.initMonaco();
       });
@@ -58,7 +58,7 @@ export class MonacoEditorDirective {
     if (!(window as any).require) {
       const loaderScript = document.createElement('script');
       loaderScript.type = 'text/javascript';
-      loaderScript.src = 'assets/monaco/vs/loader.js';
+      loaderScript.src = 'vendor/monaco/vs/loader.js';
       loaderScript.addEventListener('load', onGotAmdLoader);
       document.body.appendChild(loaderScript);
     } else {
