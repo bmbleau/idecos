@@ -1,0 +1,34 @@
+{
+    "SETTINGS_MENU_SETTINGS_TITLE": {
+        "message": "Settings",
+        "discription": "Settings settings menu title"
+    },
+    "SETTINGS_MENU_PLUGINS_TITLE": {
+        "message": "Plugins",
+        "discription": "Settings plugin menu title"
+    },
+    "SETTINGS_MENU_CHANGE_LOG_TITLE": {
+        "message": "Change Log",
+        "discription": "Settings change log menu title"
+    },
+    "SETTINGS_MENU_ABOUT_IDECOS_TITLE": {
+        "message": "About IDECOS",
+        "discription": "Settings about idecos menu title"
+    },
+    "EDITOR_OPEN_FILE_CTA": {
+        "message": "Open a document to get started",
+        "discription": "Call to action for the user to open a file to get started using the IDE"
+    },
+    "EDITOR_OPEN_PROJECT_CTA": {
+        "message": "Open a project to get started",
+        "discription": "Call to action for the user to open a directory / project to get started using the IDE"
+    },
+    "IDE_TITLE": {
+        "message": "IDECOS",
+        "discription": "Title of the application"
+    },
+    "EDITOR_COL_LINE_NUMBERS": {
+        "message": "Col $1 Line $2",
+        "discription": "The cursor position within the editor"
+    }
+}

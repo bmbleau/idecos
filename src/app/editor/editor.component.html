@@ -37,10 +37,10 @@
              *ngIf="(editor$ | async).hidden">
       <div class="row">
         <div class="column">
-          <div class="logo">IDECOS</div>
-          <p *ngIf="(editor$ | async).directory">Open a document to get started</p>
+          <div class="logo">{{ i18n.getMessage('IDE_TITLE') }}</div>
+          <p *ngIf="(editor$ | async).directory">{{ i18n.getMessage('EDITOR_OPEN_FILE_CTA') }}</p>
           <p *ngIf="!(editor$ | async).directory"
-             (click)="openProject()">Open a project to get started</p>
+             (click)="openProject()">{{ i18n.getMessage('EDITOR_OPEN_PROJECT_CTA') }}</p>
         </div>
       </div>
     </article>

@@ -40,7 +40,7 @@ export class EditorComponent implements PluginComponent {
       'colLine'
     );
     if (hasFeatureColLine && event.column) {
-      this.position = `Col ${event.column} Line ${event.lineNumber}`;
+      this.position = this.i18n.getMessage('EDITOR_COL_LINE_NUMBERS', [event.column, event.lineNumber]);
     } else {
       this.position = '';
     }
@@ -153,5 +153,9 @@ export class EditorComponent implements PluginComponent {
     }
     
     return contextMenu;
+  }
+
+  get i18n() {
+    return this.window.i18n;
   }
 }

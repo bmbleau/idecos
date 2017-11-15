@@ -6,6 +6,7 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
+import { WindowService } from '../window.service';
 
 @Component({
   selector: 'contextmenu',
@@ -24,6 +25,7 @@ export class ContextMenuComponent {
   @ViewChild('contextmenu') menuElement: ElementRef;
   
   constructor(
+    private window: WindowService,
     private _element: ElementRef,
     private viewContainerRef: ViewContainerRef,
   ) {}
@@ -31,8 +33,8 @@ export class ContextMenuComponent {
   public ngAfterViewInit() {
     this.element.focus();
     
-    const windowHeight = (window as any).innerHeight;
-    const windowWidth = (window as any).innerWidth;
+    const windowHeight = this.window.innerHeight;
+    const windowWidth = this.window.innerWidth;
     const menuHeight = this.menuElement.nativeElement.clientHeight;
     const menuWidth = this.menuElement.nativeElement.clientWidth;
 
