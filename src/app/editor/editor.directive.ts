@@ -17,6 +17,7 @@ import { FileService } from '../file.service';
 export class MonacoEditorDirective {
   private allowResizing: boolean = true;
   private value: string;
+  private _readOnly: boolean = true;
   private file;
   public editor;
 
@@ -44,7 +45,7 @@ export class MonacoEditorDirective {
     column: number,
     lineNumber: number,
   }> = new EventEmitter();
-  @Output() readOnly: boolean = true;
+  @Output() readOnly: EventEmitter<boolean> = new EventEmitter();
 
   constructor(
     private FileService: FileService,
@@ -53,6 +54,8 @@ export class MonacoEditorDirective {
   ) { }
   
   public ngAfterViewInit() {
+    this.readOnly.next(this._readOnly);
+
     const onGotAmdLoader = () => {
       (window as any).require.config({ paths: { 'vs': 'vendor/monaco/vs' } });
       (window as any).require(['vs/editor/editor.main'], () => {
@@ -93,7 +96,8 @@ export class MonacoEditorDirective {
     this.registerModels(this.directory)
       .then(() => {
         this._file = this.file;
-        this.readOnly = false;
+        this._readOnly = false;
+        this.readOnly.next(this._readOnly);
         this.exportModels.next(this.models);
         this.editor.updateOptions(this.settings);
       });
@@ -231,7 +235,7 @@ export class MonacoEditorDirective {
   get settings() {
     return Object.assign({
       theme: 'vs-dark',
-      readOnly: this.readOnly,
+      readOnly: this._readOnly,
     }, this.options);
   }
   

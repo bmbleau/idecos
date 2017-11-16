@@ -141,6 +141,10 @@ export class EditorComponent implements PluginComponent {
     }).call(this);
   }
   
+  public readOnlyHandler(flag: boolean) {
+    this.readOnly = flag;
+  }
+  
   get directoryContextMenu() {
     const contextMenu = [];
 
