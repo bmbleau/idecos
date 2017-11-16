@@ -18,6 +18,7 @@ import { WindowService } from './window.service';
 import { FileService } from './file.service';
 import { IdentityService } from './identity.service';
 import { StorageService } from './storage.service';
+import { SettingsService } from './settings/settings.service';
 
 import { ModalService } from './editor/modal/modal.service';
 import { ModalDirective } from './editor/modal/modal.directive';
@@ -27,6 +28,7 @@ import { ContextMenuComponent } from './contextmenu/contextMenu.component';
 
 // reducers
 import { editorReducer } from './editor/editor.reducer';
+import { settingsReducer } from './settings/settings.reducer';
 import { EditorEffects } from './editor/editor.effects';
 import { AppEffects } from './app.effects';
 
@@ -63,7 +65,10 @@ import { ContextMenuDirective } from './contextmenu/contextMenu.directive';
   ],
   imports: [
     BrowserModule,
-    StoreModule.provideStore({ editor: editorReducer }),
+    StoreModule.provideStore({
+      editor: editorReducer,
+      settings: settingsReducer
+    }),
     EffectsModule.run(EditorEffects),
     EffectsModule.run(AppEffects),
   ],
@@ -75,6 +80,7 @@ import { ContextMenuDirective } from './contextmenu/contextMenu.directive';
     IdentityService,
     StorageService,
     FeatureService,
+    SettingsService,
   ],
   bootstrap: [AppComponent]
 })

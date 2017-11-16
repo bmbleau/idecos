@@ -31,7 +31,7 @@ export class EditorComponent implements PluginComponent {
 
   private get editor(): EditorState {
     let state = undefined;
-    this.editor$.take(1).subscribe(_state => state = _state);
+    if (this.editor$) this.editor$.take(1).subscribe(_state => state = _state);
     return state;
   }
 

@@ -8,6 +8,7 @@ import { EditorComponent } from './editor/editor.component';
 import { LoadingComponent } from './loading/loading.component';
 import { TerminalComponent } from './terminal/terminal.component';
 import { SettingsComponent } from './settings/settings.component';
+import { SettingsService } from './settings/settings.service';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +21,7 @@ export class AppComponent {
   
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
+    public settingsService: SettingsService,
     public pluginService: PluginService,
   ) {
     

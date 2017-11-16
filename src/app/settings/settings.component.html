@@ -1,26 +1,45 @@
 <div class="container">
   <nav>
       <ul>
-        <li class="">
+        <li [ngClass]="{'active': settingsPage === 'settings'}"
+            (click)="goToPage('settings')">
           <i class="fa fa-sliders" aria-hidden="true"></i>
           <span>{{ i18n.getMessage('SETTINGS_MENU_SETTINGS_TITLE') }}</span>
         </li>
-        <li class="">
+        <li [ngClass]="{'active': settingsPage === 'plugins'}">
           <i class="fa fa-puzzle-piece" aria-hidden="true"></i>
           <span>{{ i18n.getMessage('SETTINGS_MENU_PLUGINS_TITLE') }}</span>
         </li>
-        <li class="active">
+        <li [ngClass]="{'active': settingsPage === 'change log'}"
+            (click)="goToPage('change log')">
           <i class="fa fa-info-circle" aria-hidden="true"></i>
           <span>{{ i18n.getMessage('SETTINGS_MENU_CHANGE_LOG_TITLE') }}</span>
         </li>
-        <li class="">
+        <li [ngClass]="{'active': settingsPage === 'about'}">
           <i class="fa fa-info-circle" aria-hidden="true"></i>
           <span>{{ i18n.getMessage('SETTINGS_MENU_ABOUT_IDECOS_TITLE') }}</span>
         </li>
       </ul>
   </nav>
   <div class="contents">
-    <div class="card">
+    <div class="card" *ngIf="settingsPage === 'settings'">
+      <h1>Settings</h1>
+      <div class="settings-container">
+        <h2>Debugger Mode</h2>
+        <label class="switch" *ngIf="settings">
+          <input type="checkbox"
+                 [checked]="settings.debug"
+                 (click)="toggleDebugger()">
+          <span class="slider"></span>
+        </label>
+        <p>
+          Enabling debugger mode causes the application to console log all the events that
+          take place within the variuse stores. Additionally it allows for the browser's
+          context menu to be shown to the user.
+        </p>
+      </div>
+    </div>
+    <div class="card" *ngIf="settingsPage === 'change log'">
       <h1>Change Log: v0.0.8 Pre-alpha</h1>
       <p>
         IDECOS is a full featured IDE for doing development on ChromeOS, although it will run on any platform that supports Chrome/Chromium apps.
