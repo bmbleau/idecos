@@ -2,7 +2,10 @@ import { Component, Input } from '@angular/core';
 import { PluginComponent } from '../plugin/plugin.component';
 import { WindowService } from '../window.service';
 import { Store } from '@ngrx/store';
-import { EDITOR_SETTINGS_DEBUG } from './settings.reducer';
+import {
+  EDITOR_SETTINGS_DEBUG,
+  EDITOR_SETTINGS_OPEN_ALL
+} from './settings.reducer';
 import { SettingsState } from './settings.state';
 
 export type tSettingsState = 'settings' | 'change log' | 'about' | 'plugins';
@@ -29,6 +32,12 @@ export class SettingsComponent implements PluginComponent {
   public toggleDebugger() {
     this.store$.dispatch({
       type: EDITOR_SETTINGS_DEBUG,
+    });
+  }
+  
+  public toggleOpenAll() {
+    this.store$.dispatch({
+      type: EDITOR_SETTINGS_OPEN_ALL,
     });
   }
   

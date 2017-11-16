@@ -26,16 +26,42 @@
       <h1>Settings</h1>
       <div class="settings-container">
         <h2>Debugger Mode</h2>
-        <label class="switch" *ngIf="settings">
+        <label class="switch settings-input" *ngIf="settings">
           <input type="checkbox"
                  [checked]="settings.debug"
                  (click)="toggleDebugger()">
           <span class="slider"></span>
         </label>
         <p>
-          Enabling debugger mode causes the application to console log all the events that
-          take place within the variuse stores. Additionally it allows for the browser's
-          context menu to be shown to the user.
+          Boolean flag that denotes if the application is in debugging mode. 
+          Enables getting access to the chrome dev tools from the app, and
+          console logs the action events to the console.
+        </p>
+      </div>
+      <div class="settings-container">
+        <h2>Auto Save Interval</h2>
+        <label class="settings-input" *ngIf="settings">
+          <input [value]="settings.autoSaveInterval"
+                 class="number-input"
+                 type="number">
+        </label>
+        <p>
+          Number that indicates the interval that the editor auto saves your
+          unsaved actions. Number is in units of mins. Set to -1 to disable.
+        </p>
+      </div>
+      <div class="settings-container">
+        <h2>Scan Project At Start</h2>
+        <label class="switch settings-input" *ngIf="settings">
+          <input type="checkbox"
+                 [checked]="settings.openAll"
+                   (click)="toggleOpenAll()">
+          <span class="slider"></span>
+        </label>
+        <p>
+          Boolean flag that indicates that when the editor opens it should scan
+          your entire project or just a directory at a time. Keeping this off will
+          improve initial load of the application.
         </p>
       </div>
     </div>

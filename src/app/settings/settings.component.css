@@ -46,7 +46,7 @@ nav ul .active, nav ul li:hover {
   width: 100%;
 }
 
-.contents .card .settings-container .switch {
+.contents .card .settings-container .settings-input {
   position: absolute;
   right: 10px;
   top: -5px;
@@ -98,4 +98,13 @@ input:focus + .slider {
 
 input:checked + .slider:before {
   transform: translateX(26px);
+}
+
+.number-input {
+  padding: 5px;
+  width: 55px;
+  border-radius: 10px;
+  border: 0px;
+  text-align: center;
+  background-color: #ccc;
 }
