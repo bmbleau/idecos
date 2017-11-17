@@ -31,13 +31,19 @@ export class SettingsComponent implements PluginComponent {
 
   public toggleDebugger() {
     this.store$.dispatch({
-      type: EDITOR_SETTINGS_DEBUG,
+      type: 'EDITOR:SETTINGS:SAVE',
+      payload: {
+        setting: EDITOR_SETTINGS_DEBUG,
+      },
     });
   }
   
   public toggleOpenAll() {
     this.store$.dispatch({
-      type: EDITOR_SETTINGS_OPEN_ALL,
+      type: 'EDITOR:SETTINGS:SAVE',
+      payload: {
+        setting: EDITOR_SETTINGS_OPEN_ALL,
+      },
     });
   }
   

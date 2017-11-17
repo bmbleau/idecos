@@ -30,6 +30,7 @@ import { ContextMenuComponent } from './contextmenu/contextMenu.component';
 import { editorReducer } from './editor/editor.reducer';
 import { settingsReducer } from './settings/settings.reducer';
 import { EditorEffects } from './editor/editor.effects';
+import { SettingsEffects } from './settings/settings.effects';
 import { AppEffects } from './app.effects';
 
 import { TerminalComponent } from './terminal/terminal.component';
@@ -70,6 +71,7 @@ import { ContextMenuDirective } from './contextmenu/contextMenu.directive';
       settings: settingsReducer
     }),
     EffectsModule.run(EditorEffects),
+    EffectsModule.run(SettingsEffects),
     EffectsModule.run(AppEffects),
   ],
   providers: [

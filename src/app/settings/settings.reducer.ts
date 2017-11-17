@@ -11,19 +11,29 @@ export function settingsReducer(state: SettingsState = new SettingsState(), acti
 
     switch (action.type) {
         case EDITOR_SETTINGS_DEBUG: {
-            return Object.assign(new SettingsState(), state, {
-                debug: !state.debug,
-            });
+            let debug;
+            if (action.payload === void 0) {
+              debug = !state.debug;
+            } else {
+              debug = action.payload;
+            }
+
+            return Object.assign(new SettingsState(), state, { debug });
         }
         case EDITOR_SETTINGS_AUTO_SAVE: {
-            return Object.assign(new SettingsState(), state, {
-                autoSaveInterval: Math.abs(action.payload),
-            });
+            const autoSaveInterval = Math.abs(action.payload) || 0;
+
+            return Object.assign(new SettingsState(), state, { autoSaveInterval });
         }
         case EDITOR_SETTINGS_OPEN_ALL: {
-            return Object.assign(new SettingsState(), state, {
-                openAll: !state.openAll,
-            });
+            let openAll;
+            if (action.payload === void 0) {
+              openAll = !state.openAll;
+            } else {
+              openAll = action.payload;
+            }
+
+            return Object.assign(new SettingsState(), state, { openAll });
         }
         default: {
           return state;
