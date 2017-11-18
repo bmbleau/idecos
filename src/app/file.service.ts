@@ -26,6 +26,7 @@ export class FileService {
     const content = await this.readFileHandler(entry)
       .then(this.readFiles.bind(this))
       .then((contents: string) => {
+        if (!entry.md5) entry.md5 = md5(contents);
         if (parse) return JSON.parse(contents);
         return contents;
       });

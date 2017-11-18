@@ -31,7 +31,7 @@ export class MonacoEditorDirective {
         this.editor.setModel(model);
       } else {
         this.registerModel(file).then(_model => {
-          this.editor.setModel(_model)
+          this.editor.setModel(_model);
         });
       }
     }
@@ -80,6 +80,11 @@ export class MonacoEditorDirective {
     this.changeDetector.reattach();
   }
   
+  private ngOnDestroy() {
+    this.changeDetector.detach();
+    this.changeDetector.reattach();
+  }
+  
   private initMonaco() {
     this.configureTypeScript({
       experimentalDecorators: true,
@@ -93,14 +98,18 @@ export class MonacoEditorDirective {
 
     this.editor = this.monaco.editor.create(this.element, this.settings);
 
-    this.registerModels(this.directory)
-      .then(() => {
-        this._file = this.file;
-        this._readOnly = false;
-        this.readOnly.next(this._readOnly);
-        this.exportModels.next(this.models);
-        this.editor.updateOptions(this.settings);
-      });
+    const register = this.directory ?
+      this.registerModels(this.directory) :
+      this.registerModel(this.file).then();
+                     
+    register.then(() => {
+      if (this.directory) this._file = this.file;
+      this._readOnly = false;
+      this.readOnly.next(this._readOnly);
+      this.exportModels.next(this.models);
+      this.editor.updateOptions(this.settings);
+    });
+   
 
     if (this.theme) this.registerTheme('custom', this.theme);
 
@@ -137,6 +146,10 @@ export class MonacoEditorDirective {
             this.digest();
           } 
         }
+
+        if (this.directory) {
+          this.configureTypeScript(this.compilerOptions);
+        }
       });
 
     this.editor
@@ -157,7 +170,7 @@ export class MonacoEditorDirective {
   // Recursively goes through all the known files and loads their models
   // into the editor's instance.
   private registerModels(entry) {
-    if (!entry) return undefined;
+    if (!entry) return Promise.resolve(undefined);
     
     if (entry.isFile) {
       return Promise.resolve(this.registerModel(entry));
@@ -197,13 +210,15 @@ export class MonacoEditorDirective {
   
   private configureTypeScript(settings) {
     const regex = new RegExp(/^(?=.*\btsconfig\b)(?=.*\bjson\b).*$/);
-    this.directory.contents.forEach(item => {
+    if (this.directory) this.directory.contents.forEach(item => {
       if (regex.test(item.name)) {
-        this.monaco.languages.typescript.typescriptDefaults.setCompilerOptions(Object.assign(
-          {},
-          settings,
-          this.FileService.getContents(item, true)
-        ));
+        this.monaco.languages.typescript.typescriptDefaults.setCompilerOptions(
+          Object.assign(
+            {},
+            settings,
+            this.FileService.getContents(item, true)
+          )
+        );
       }
     });
   }
@@ -267,5 +282,9 @@ export class MonacoEditorDirective {
   
   get element() {
     return this._element.nativeElement;
+  }
+  
+  private get compilerOptions() {
+    if (this.monaco) return this.monaco.languages.typescript.typescriptDefaults._compilerOptions;
   }
 }

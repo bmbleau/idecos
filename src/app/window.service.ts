@@ -75,4 +75,11 @@ export class WindowService {
   get innerWidth() {
     return this.window.innerWidth;
   }
+
+  get launchQueue() {
+    if (this.isChromeApp) {
+      return this.window.launchQueue;
+    }
+    return [];
+  }
 }

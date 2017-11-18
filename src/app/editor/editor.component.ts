@@ -1,4 +1,8 @@
-import { Component, Input } from '@angular/core';
+import {
+  Component,
+  Input,
+  ChangeDetectorRef
+} from '@angular/core';
 import { PluginComponent } from '../plugin/plugin.component';
 import { BehaviorSubject, Subscription } from 'rxjs/Rx';
 import { FileService } from '../file.service';
@@ -21,13 +25,51 @@ export class EditorComponent implements PluginComponent {
   public readOnly: boolean = true;
   private models: any[] = [];
   private contents: string;
-  
+  private fileWatchSub: number;
+
   constructor(
     public FileService: FileService,
     private FeatureService: FeatureService,
     private window: WindowService,
+    private changeDetector: ChangeDetectorRef,
     private store$: Store<EditorState>,
   ) { }
+
+  public ngOnInit() {
+    this.watchFileHandler();
+  }
+
+  public ngOnDestroy() {
+    if (this.fileWatchSub) clearInterval(this.fileWatchSub);
+  }
+  
+  private watchFileHandler() {
+    // HACK: FIXME: We are being passed in contents from outside of
+    // angular's confert zone. This allows for files to be added to
+    // the state from the chrome app window'w launch action listener.
+    // This should probably be moved to somewhere else.
+    this.fileWatchSub = setInterval(() => {
+      if (this.window.launchQueue.length) {
+        // on each pass when there are items in the queue
+        // dispatch an event to open a passed in files
+        // contents.
+        let item = this.window.launchQueue.shift();
+        this.store$.dispatch({
+          type: 'editor:tab:add',
+          payload: item,
+        });
+        
+        // Add a change detection at the end of the javascript cycle
+        // to detect the newly added tab and initalize the loading
+        // of it's contents.
+        setTimeout(() => {
+          this.changeDetector.detach();
+          this.changeDetector.detectChanges();
+          this.changeDetector.reattach();
+        }, 0);
+      }
+    }, 1000);
+  }
 
   private get editor(): EditorState {
     let state = undefined;

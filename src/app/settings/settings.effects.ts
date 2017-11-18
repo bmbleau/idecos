@@ -50,7 +50,6 @@ export class SettingsEffects {
       return Observable.fromPromise(
         Promise.all(settings)
           .then((_settings) => {
-            console.log(_settings);
             return _settings.map((_setting, index) => {
               return {
                 type: settingTypes[index],
@@ -74,8 +73,6 @@ export class SettingsEffects {
       } else {
         payload = action.payload.value;
       }
-
-      console.log(type, payload);
 
       const storeSettingPromise = this.storageService.set(type, payload);
       return Observable.fromPromise(storeSettingPromise.then(res => {
