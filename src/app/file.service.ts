@@ -110,7 +110,14 @@ export class FileService {
       if (_entry.isFile) files.push(_entry);
     });
     
-    entry.contents = directories.concat(files);
+    const alphaSort = (a, b) => {
+      if(a.name < b.name) return -1;
+    if(a.name > b.name) return 1;
+    return 0;
+    };
+
+    entry.contents = directories.sort(alphaSort)
+                                .concat(files.sort(alphaSort));
     return entry;
   }
   
