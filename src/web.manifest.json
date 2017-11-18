@@ -1,0 +1,32 @@
+{
+  "short_name": "IDECOS",
+  "name": "IDECOS",
+  
+  "background_color": "#002B36",
+  "theme_color": "#073642",
+  "orientation": "landscape",
+  "display": "standalone",
+
+  "icons": [
+    {
+      "src": "assets/icons/idecos_64_icon.png",
+      "type": "image/png",
+      "sizes": "16x16"
+    },
+    {
+      "src": "assets/icons/idecos_64_icon.png",
+      "type": "image/png",
+      "sizes": "64x64"
+    },
+    {
+      "src": "assets/icons/idecos_128_icon.png",
+      "type": "image/png",
+      "sizes": "128x128"
+    },
+    {
+      "src": "assets/icons/idecos_256_icon.png",
+      "type": "image/png",
+      "sizes": "256x256"
+    }
+  ]
+}
