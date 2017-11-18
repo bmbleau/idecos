@@ -85,7 +85,7 @@ export class FileService {
         .then(this.processDirectory.bind(this))
         .then(directory => {
           entry.contents = directory;
-          return entry;
+          return this.sortDirectories(entry);
         });
     }).bind(this)));
   }
@@ -98,6 +98,20 @@ export class FileService {
   
   get processFiles() {
     return this._processFiles.bind(this);
+  }
+  
+  public sortDirectories(entry) {
+    if (entry.isFile) return entry;
+    const directories = [];
+    const files = [];
+
+    entry.contents.forEach(_entry => {
+      if (_entry.isDirectory) directories.push(_entry);
+      if (_entry.isFile) files.push(_entry);
+    });
+    
+    entry.contents = directories.concat(files);
+    return entry;
   }
   
   private _processFiles(entries) {
@@ -116,7 +130,7 @@ export class FileService {
       return this._processFiles(entry.contents)
         .then(subEntries => {
           entry.contents = subEntries;
-          return entry;
+          return this.sortDirectories(entry);
         });
     }).bind(this)));
   }

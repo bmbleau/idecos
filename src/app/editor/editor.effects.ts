@@ -30,7 +30,7 @@ export class EditorEffects {
       .then(processFiles)
       .then(subEntries => {
         rootDirectory.contents = subEntries;
-        return rootDirectory;
+        return this.FileService.sortDirectories(rootDirectory);
       });
     
     return projectPromises;
@@ -56,7 +56,7 @@ export class EditorEffects {
       .then(processFiles)
       .then(subEntries => {
         rootDirectory.contents = subEntries;
-        return rootDirectory;
+        return this.FileService.sortDirectories(rootDirectory);
       });
     
     return projectPromises;
