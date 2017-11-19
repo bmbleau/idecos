@@ -6,6 +6,8 @@ IDECOS is a full featured IDE for doing development on ChromeOS, although it wil
 
 This project is a Chrome App and as such should not be served over http but instead within a chrome app enviroment. Bellow are instructions on how to build the project and load it into the chrome browser.
 
+Note: This project was built using node v6.11.0 
+
 1. Clone the repository to your local enviroment's workspace directroy
 2. Run `npm install`
 3. Run `npm run build`
