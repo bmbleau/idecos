@@ -60,6 +60,7 @@ section nav {
   background-color: #333333;
   color: #DADADA;
   height: 40px;
+  width: calc(100vw - 286px);
   border-bottom: 1px solid black;
 }
 
@@ -72,27 +73,39 @@ section nav ul {
   margin: 0px;
   padding: 0px;
   height: 40px;
+  overflow-x: auto;
 }
 
 section nav ul li {
   display: inline;
   flex: 1;
-  width: 100px;
+  max-width: 200px;
+  min-width: 200px;
   line-height: 40px;
   font-weight: bold;
   overflow: hidden;
   color: #eee;
   background-color: #333333;
   margin-bottom: -1px;
+  position: relative;
+  padding-right: 10px;
+  padding-left: 10px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  z-index: 1;
 }
 
 section nav ul .active {
   background-color: #1E1E1E;
   color: #F1F1EC;
+  padding-right: 30px;
 }
 
 section nav ul li .close {
-  margin-left: 6px;
+  position: absolute;
+  right: 10px;
+  top: 14px;
+  z-index: 2;
 }
 
 section article {
